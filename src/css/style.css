@@ -1,0 +1,356 @@
+body {
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+}
+.container {
+  display: grid;
+  grid-template-areas:
+    "aside header header"
+    "aside main nav"
+    "aside main nav";
+
+  grid-template-columns: 0.2fr 2fr 0.8fr;
+  grid-template-rows: 0.1fr;
+  /* position: fixed; */
+}
+
+header {
+  grid-area: header;
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 50px;
+  color: black;
+}
+
+aside {
+  grid-area: aside;
+  background-color: #263159;
+  padding: 30px 0;
+}
+
+nav {
+  grid-area: nav;
+  background-color: #263159;
+  padding: 30px 0;
+}
+
+main {
+  grid-area: main;
+  background-color: aliceblue;
+  /* background-color: #f7f7f7; */
+  padding: 30px 0;
+}
+
+/* Header */
+header div:first-child {
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+header div:nth-child(2) {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: rgb(184, 184, 184);
+}
+
+::placeholder {
+  color: rgb(184, 184, 184);
+}
+
+header div:nth-child(2) input {
+  padding: 10px 10px 10px 50px;
+  width: 30rem;
+  height: 20px;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: rgb(148, 148, 148);
+  background-color: rgb(245, 245, 245);
+}
+header div:nth-child(2) .fa-search {
+  position: absolute;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+header div:nth-child(3) {
+  display: flex;
+  align-items: center;
+}
+
+header div:nth-child(3) p,
+header div:nth-child(3) img {
+  margin: 0 5px;
+  font-size: 1em;
+  font-weight: 500;
+  color: rgb(184, 184, 184);
+}
+
+header div:nth-child(3) img {
+  border-radius: 50px;
+  height: 35px;
+  width: 35px;
+}
+header div:last-child a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #ff5f9e;
+}
+
+header div:last-child a > p {
+  font-size: 1em;
+  padding: 0 10px;
+  font-weight: 600;
+}
+
+header div:last-child a,
+header div:last-child p {
+  margin: 0 5px;
+}
+
+/* Sidebar */
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  padding-top: 5rem;
+}
+
+.sidebar-menu a {
+  display: flex;
+  color: white;
+  margin: 25px 20px;
+  font-size: 1.7em;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+}
+
+main > div {
+  display: flex;
+  justify-content: space-between;
+}
+
+main > div:first-child {
+  background-color: white;
+
+  padding: 30px 30px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+main > div:first-child .icon-menu-main {
+  justify-content: end;
+  right: 0;
+  color: rgb(184, 184, 184);
+}
+
+/* problem */
+
+main > div:first-child .menu-main a {
+  /* position: fixed; */
+  text-decoration: none;
+  color: rgb(184, 184, 184);
+  margin: 0 70px 30px 0;
+  padding: 20px;
+  cursor: pointer;
+}
+
+main > div:first-child .menu-main a.active {
+  background-color: #eeeeee;
+  border-radius: 5px;
+  color: black;
+}
+
+main > div:first-child .menu-main a:hover {
+  background-color: #eeeeee;
+  border-radius: 5px;
+  color: black;
+}
+/*  */
+
+main .main-content {
+  height: 80vh;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+  /* padding-right: 30px; */
+  justify-content: space-around;
+}
+
+main .main-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+main div:last-child .card {
+  background-color: aquamarine;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  margin: 20px 20px;
+  width: 260px;
+  height: 300px;
+  cursor: pointer;
+}
+
+main div:last-child .card img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+main div:last-child .card span {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #263159;
+  opacity: 0.69;
+  padding: 10px 10px;
+  width: 12em;
+}
+
+nav {
+  padding: 0;
+}
+
+nav .order-list-title {
+  padding: 0 30px 50px 30px;
+  box-sizing: border-box;
+}
+
+nav .order-list-title p {
+  font-size: 2em;
+  margin-bottom: 0;
+}
+nav .order-list-title span {
+  font-size: 0.9em;
+}
+
+nav .search-cart {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+}
+
+nav .search-cart input {
+  border: none;
+  outline: none;
+  padding: 25px 30px;
+  width: 100%;
+  font-size: 20px;
+  background-color: #19213d;
+  color: white;
+}
+
+nav .search-cart .fa-search {
+  position: absolute;
+  color: rgb(184, 184, 184);
+  right: 20px;
+}
+
+nav .cart-content {
+  display: flex;
+  flex-direction: column;
+  padding: 0 30px 50px 30px;
+  overflow: auto;
+  height: 30vh;
+}
+
+nav .cart-content::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 10px;
+}
+
+nav .cart-content .cart {
+  margin-top: 20px;
+}
+
+nav .cart-content .cart > p {
+  padding-bottom: 0;
+}
+
+nav .cart-content .cart > div {
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+nav .cart-content .cart > div span {
+  cursor: pointer;
+}
+
+nav .cart-content .cart > div input {
+  font-size: 1em;
+  width: 2em;
+  height: 1em;
+  padding: 6px;
+  outline: none;
+  background-color: #e9e8e8;
+  border-radius: 5px;
+}
+
+nav .subtotal-tax-total {
+  background-color: #19213d;
+  padding: 0 30px 0 30px;
+}
+
+nav .subtotal-tax-total .subtotal {
+  display: flex;
+  justify-content: space-between;
+}
+
+nav .subtotal-tax-total .tax {
+  display: flex;
+  justify-content: space-between;
+}
+
+nav .subtotal-tax-total .total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 25px;
+}
+
+nav .cart-button {
+  padding: 0 30px 0 30px;
+  display: flex;
+  margin-top: 8.5%;
+}
+nav .cart-button a {
+  margin: 0 10px;
+  display: inline-block;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 6px;
+  color: white;
+  padding: 20px 30px;
+  border: 2px solid white;
+}
+nav .cart-button a:last-child {
+  flex: 2.8;
+  background-color: #ff5f9e;
+  border: none;
+}

@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "category": "appetizer",
+    "menu_name": "Salad",
+    "price": 25000,
+    "gambar": "beef Bourguignon.jpg"
+  },
+  {
+    "id": 3,
+    "category": "appetizer",
+    "menu_name": "Kentang Goreng",
+    "price": 30000,
+    "gambar": "kentang goreng.jpg"
+  },
+  {
+    "id": 4,
+    "category": "appetizer",
+    "menu_name": "Canape",
+    "price": 20000,
+    "gambar": "canape.jpg"
+  },
+  {
+    "id": 6,
+    "category": "main course",
+    "menu_name": "Chicken Parmigiana",
+    "price": 75000,
+    "gambar": "chicken parmigiana.jpeg"
+  },
+  {
+    "id": 7,
+    "category": "main course",
+    "menu_name": "Beef Bourguignon",
+    "price": 80000,
+    "gambar": "beef Bourguignon.jpg"
+  },
+  {
+    "id": 8,
+    "category": "main course",
+    "menu_name": "Spaghetti",
+    "price": 75000,
+    "gambar": "spaghetti.jpg"
+  },
+  {
+    "id": 9,
+    "category": "dessert",
+    "menu_name": "Fruit - chia jars with bleuberries",
+    "price": 20000,
+    "gambar": "fruit.jpg"
+  },
+  {
+    "id": 10,
+    "category": "dessert",
+    "menu_name": "Milkshake - Strawberry Mango Peach Smoothies",
+    "price": 15000,
+    "gambar": "milkshake.jpg"
+  },
+  {
+    "id": 11,
+    "category": "dessert",
+    "menu_name": "Pudding - mango pudding",
+    "price": 15000,
+    "gambar": "manggo pudding.jpg"
+  },
+  {
+    "id": 12,
+    "category": "dessert",
+    "menu_name": "Pastri choux",
+    "price": 25000,
+    "gambar": "vanilla-choux-pastry.jpg"
+  },
+  {
+    "id": 13,
+    "category": "drink",
+    "menu_name": "Strawberry cocktail drinks",
+    "price": 35000,
+    "gambar": "straw-cocktail.jpg"
+  },
+  {
+    "id": 14,
+    "category": "drink",
+    "menu_name": "Cocktail Drink",
+    "price": 30000,
+    "gambar": "cocktail.jpg"
+  }
+]
