@@ -1,6 +1,6 @@
 import React from "react";
 
-const OrderListComponent = ({ item, deleteItem, handleQuantity }) => {
+const OrderListComponent = ({ item, deleteItem, handleSubTotal }) => {
   return (
     <div className="cart">
       <p>{item.menu_name}</p>
@@ -10,8 +10,9 @@ const OrderListComponent = ({ item, deleteItem, handleQuantity }) => {
           type="number"
           defaultValue={1}
           min={1}
+          max={item.stock}
           onChange={(event) =>
-            handleQuantity(event.currentTarget.value, item.id)
+            handleSubTotal(event.currentTarget.value, item.id)
           }
         />
         <p>260000</p>

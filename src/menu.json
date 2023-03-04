@@ -4,83 +4,95 @@
     "category": "appetizer",
     "menu_name": "Salad",
     "price": 25000,
-    "gambar": "beef Bourguignon.jpg"
+    "gambar": "beef Bourguignon.jpg",
+    "stock": 5
   },
   {
     "id": 3,
     "category": "appetizer",
     "menu_name": "Kentang Goreng",
     "price": 30000,
-    "gambar": "kentang goreng.jpg"
+    "gambar": "kentang goreng.jpg",
+    "stock": 7
   },
   {
     "id": 4,
     "category": "appetizer",
     "menu_name": "Canape",
     "price": 20000,
-    "gambar": "canape.jpg"
+    "gambar": "canape.jpg",
+    "stock": 3
   },
   {
     "id": 6,
     "category": "main course",
     "menu_name": "Chicken Parmigiana",
     "price": 75000,
-    "gambar": "chicken parmigiana.jpeg"
+    "gambar": "chicken parmigiana.jpeg",
+    "stock": 5
   },
   {
     "id": 7,
     "category": "main course",
     "menu_name": "Beef Bourguignon",
     "price": 80000,
-    "gambar": "beef Bourguignon.jpg"
+    "gambar": "beef Bourguignon.jpg",
+    "stock": 9
   },
   {
     "id": 8,
     "category": "main course",
     "menu_name": "Spaghetti",
     "price": 75000,
-    "gambar": "spaghetti.jpg"
+    "gambar": "spaghetti.jpg",
+    "stock": 10
   },
   {
     "id": 9,
     "category": "dessert",
     "menu_name": "Fruit - chia jars with bleuberries",
     "price": 20000,
-    "gambar": "fruit.jpg"
+    "gambar": "fruit.jpg",
+    "stock": 5
   },
   {
     "id": 10,
     "category": "dessert",
     "menu_name": "Milkshake - Strawberry Mango Peach Smoothies",
     "price": 15000,
-    "gambar": "milkshake.jpg"
+    "gambar": "milkshake.jpg",
+    "stock": 1
   },
   {
     "id": 11,
     "category": "dessert",
     "menu_name": "Pudding - mango pudding",
     "price": 15000,
-    "gambar": "manggo pudding.jpg"
+    "gambar": "manggo pudding.jpg",
+    "stock": 15
   },
   {
     "id": 12,
     "category": "dessert",
     "menu_name": "Pastri choux",
     "price": 25000,
-    "gambar": "vanilla-choux-pastry.jpg"
+    "gambar": "vanilla-choux-pastry.jpg",
+    "stock": 13
   },
   {
     "id": 13,
     "category": "drink",
     "menu_name": "Strawberry cocktail drinks",
     "price": 35000,
-    "gambar": "straw-cocktail.jpg"
+    "gambar": "straw-cocktail.jpg",
+    "stock": 5
   },
   {
     "id": 14,
     "category": "drink",
     "menu_name": "Cocktail Drink",
     "price": 30000,
-    "gambar": "cocktail.jpg"
+    "gambar": "cocktail.jpg",
+    "stock": 7
   }
 ]

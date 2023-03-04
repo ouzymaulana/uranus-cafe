@@ -1,54 +1,47 @@
 import React, { useState } from "react";
 import CardComponent from "./CardComponent";
 
-const MainComponent = ({ data, handleCat, orderMenu }) => {
-  const [activeLink, setActiveLink] = useState("all");
-
+const MainComponent = ({ data, handleCat, orderMenu, categoryActive }) => {
   return (
     <main>
       <div>
         <div className="menu-main">
           <a
-            className={activeLink === "all" ? "active" : ""}
+            className={categoryActive === "" ? "active" : ""}
             onClick={() => {
               handleCat("");
-              setActiveLink("all");
             }}
           >
             All
           </a>
           <a
-            className={activeLink === "appetizer" ? "active" : ""}
+            className={categoryActive === "appetizer" ? "active" : ""}
             onClick={() => {
               handleCat("appetizer");
-              setActiveLink("appetizer");
             }}
           >
             Appetizer
           </a>
           <a
-            className={activeLink === "main-course" ? "active" : ""}
+            className={categoryActive === "main course" ? "active" : ""}
             onClick={() => {
               handleCat("main course");
-              setActiveLink("main-course");
             }}
           >
             Main Course
           </a>
           <a
-            className={activeLink === "dessert" ? "active" : ""}
+            className={categoryActive === "dessert" ? "active" : ""}
             onClick={() => {
               handleCat("dessert");
-              setActiveLink("dessert");
             }}
           >
             Dessert
           </a>
           <a
-            className={activeLink === "drink" ? "active" : ""}
+            className={categoryActive === "drink" ? "active" : ""}
             onClick={() => {
               handleCat("drink");
-              setActiveLink("drink");
             }}
           >
             Drink

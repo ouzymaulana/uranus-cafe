@@ -193,7 +193,7 @@ main .main-content {
   flex-wrap: wrap;
   overflow: auto;
   /* padding-right: 30px; */
-  justify-content: space-around;
+  justify-content: start;
 }
 
 main .main-content::-webkit-scrollbar {
@@ -201,12 +201,12 @@ main .main-content::-webkit-scrollbar {
 }
 
 main div:last-child .card {
-  background-color: aquamarine;
+  background-color: #c1c1c1;
   border-radius: 20px;
   overflow: hidden;
   position: relative;
   margin: 20px 20px;
-  width: 260px;
+  width: 280px;
   height: 300px;
   cursor: pointer;
 }
@@ -226,6 +226,17 @@ main div:last-child .card span {
   opacity: 0.69;
   padding: 10px 10px;
   width: 12em;
+}
+main div:last-child .card em {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  transform: translate(-10%, -10%);
+  background-color: #ff5f9e;
+  opacity: 0.89;
+  padding: 5px 6px;
+  width: auto;
+  border-radius: 15px;
 }
 
 nav {
@@ -273,6 +284,7 @@ nav .cart-content {
   padding: 0 30px 50px 30px;
   overflow: auto;
   height: 30vh;
+  color: black;
 }
 
 nav .cart-content::-webkit-scrollbar {
@@ -312,6 +324,25 @@ nav .cart-content .cart > div input {
   background-color: #e9e8e8;
   border-radius: 5px;
 }
+
+/* ! loading cart skeleton */
+nav .cart-content .cart-skeleton {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+nav .cart-content .cart-skeleton > span {
+  padding-bottom: 10px;
+}
+
+nav .cart-content .cart-item-skeleton {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+/* ! */
 
 nav .subtotal-tax-total {
   background-color: #19213d;

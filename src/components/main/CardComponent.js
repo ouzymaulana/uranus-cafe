@@ -10,6 +10,7 @@ const CardComponent = ({ data, orderMenu }) => {
         height={320}
       />
       <span>{data.menu_name}</span>
+      <em>stock {data.stock}</em>
     </div>
   );
 };

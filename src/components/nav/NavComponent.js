@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import OrderListComponent from "./OrderListComponent";
+import LoadingOrderMenu from "./LoadingOrderMenu";
 
-const NavComponent = ({ data, deleteItem, handleQuantity, subTotal }) => {
+const NavComponent = ({
+  data,
+  searchData,
+  searchOrderMenu,
+  deleteItem,
+  handleSubTotal,
+}) => {
+  const currentData = searchData == "" ? data : searchData;
+
   return (
     <nav>
       <div className="order-list-title">
@@ -14,18 +23,19 @@ const NavComponent = ({ data, deleteItem, handleQuantity, subTotal }) => {
           name="search"
           placeholder="Search Something.."
           autoComplete="off"
+          onChange={(event) => searchOrderMenu(event.target.value)}
         />
         <span className="fa fa-search"></span>
       </div>
       <div className="cart-content">
-        {data.map((result, index) => (
-          <OrderListComponent
-            item={result}
-            deleteItem={deleteItem}
-            key={index}
-            handleQuantity={handleQuantity}
-            subTotal={subTotal}
-          />
+        {currentData.map((result, index) => (
+          <LoadingOrderMenu />
+          // <OrderListComponent
+          //   item={result}
+          //   deleteItem={deleteItem}
+          //   key={index}
+          //   handleSubTotal={handleSubTotal}
+          // />
         ))}
       </div>
       <div className="subtotal-tax-total">
