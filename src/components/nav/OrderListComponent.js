@@ -1,6 +1,6 @@
 import React from "react";
 
-const OrderListComponent = ({ item, deleteItem, handleSubTotal }) => {
+const OrderListComponent = ({ item, deleteItem, handleSubTotal, subTotal }) => {
   return (
     <div className="cart">
       <p>{item.menu_name}</p>
@@ -15,7 +15,7 @@ const OrderListComponent = ({ item, deleteItem, handleSubTotal }) => {
             handleSubTotal(event.currentTarget.value, item.id)
           }
         />
-        <p>260000</p>
+        <p>{subTotal(item)}</p>
         <span onClick={() => deleteItem(item.id)}>
           <i className="fa-sharp fa-solid fa-xmark"></i>
         </span>

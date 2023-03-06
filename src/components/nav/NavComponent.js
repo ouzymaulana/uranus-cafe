@@ -8,6 +8,9 @@ const NavComponent = ({
   searchOrderMenu,
   deleteItem,
   handleSubTotal,
+  loadingStatus,
+  subTotal,
+  total,
 }) => {
   const currentData = searchData == "" ? data : searchData;
 
@@ -28,20 +31,23 @@ const NavComponent = ({
         <span className="fa fa-search"></span>
       </div>
       <div className="cart-content">
-        {currentData.map((result, index) => (
-          <LoadingOrderMenu />
-          // <OrderListComponent
-          //   item={result}
-          //   deleteItem={deleteItem}
-          //   key={index}
-          //   handleSubTotal={handleSubTotal}
-          // />
-        ))}
+        {loadingStatus && searchData && <LoadingOrderMenu />}
+        {!loadingStatus &&
+          currentData.map((result, index) => (
+            <OrderListComponent
+              item={result}
+              deleteItem={deleteItem}
+              key={index}
+              handleSubTotal={handleSubTotal}
+              subTotal={subTotal}
+              total={total}
+            />
+          ))}
       </div>
       <div className="subtotal-tax-total">
         <div className="subtotal">
           <p>Subtotal</p>
-          <p>74.000</p>
+          <p>{total}</p>
         </div>
         <div className="tax">
           <p>10% Tax</p>

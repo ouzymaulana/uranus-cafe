@@ -12,22 +12,29 @@ function App() {
   const [selectCategory, setSelectCategory] = useState("");
   const [searchName, setSearchName] = useState("");
   const [orderMenu, setOrderMenu] = useState([]);
-  const [subTotal, setSubTotal] = useState([]);
   const [isLoading, setIsLoading] = useState();
+  const [skaletonLoading, setSkaletonLoding] = useState(false);
   const [isCategory, setIsCateory] = useState("");
   const [searchOrderMenu, setSearchOrderMenu] = useState([]);
+  const [orderQuantity, setOrderQuantity] = useState({});
+  // const [subTotal, setSubTotal] = useState([]);
+  const [total, setTotal] = useState([]);
 
   // ! mencari data dalam keranjang
   const handleSearchOrderMenu = (value) => {
-    clearTimeout(isLoading);
-    const newTimer = setTimeout(() => {
-      const result = orderMenu.filter((data) =>
-        data.menu_name.toLowerCase().includes(value.toLowerCase())
-      );
-      setSearchOrderMenu(result);
-    }, 2000);
+    if (value !== "") {
+      clearTimeout(isLoading);
+      setSkaletonLoding(true);
+      const newTimer = setTimeout(() => {
+        const result = orderMenu.filter((data) =>
+          data.menu_name.toLowerCase().includes(value.toLowerCase())
+        );
+        setSearchOrderMenu(result);
+        setSkaletonLoding(false);
+      }, 1000);
 
-    setIsLoading(newTimer);
+      setIsLoading(newTimer);
+    }
   };
 
   // ! handle search by category
@@ -53,30 +60,94 @@ function App() {
 
   // ! penambahan data dalam keranjang
   const handleOrderMenu = (value) => {
-    setOrderMenu([...orderMenu, value]);
-    // setOrderMenu(orderMenu.concat([value]));
+    const menuOrder = menu.find((menuOrder) => menuOrder.id == value.id);
+
+    if (menuOrder.stock > 0) {
+      setOrderMenu([...orderMenu, value]);
+
+      setMenu(
+        menu.map((dataMenu) =>
+          dataMenu.id === value.id
+            ? { ...dataMenu, stock: dataMenu.stock - 1 }
+            : dataMenu
+        )
+      );
+
+      // diperbaiki
+      setOrderQuantity({
+        ...orderQuantity,
+        [value.id]: (orderQuantity[value.id] || 0) + 1,
+      });
+    } else {
+      alert("maaf, pesanan tersebut sedang kosong");
+    }
+    // setSkaletonLoding(false);
   };
 
   // ! menghapus data dalam keranjang
   const deleteOrderMenu = (value) => {
-    setOrderMenu(orderMenu.filter((dataOrder) => dataOrder.id !== value));
+    console.log(orderQuantity);
+    // setOrderMenu(orderMenu.filter((dataOrder) => dataOrder.id !== value));
+
+    const index = orderMenu.findIndex((dataOrder) => dataOrder.id === value);
+    const newOrderMenu = [...orderMenu];
+    newOrderMenu.splice(index, 1);
+    setOrderMenu(newOrderMenu);
+
+    // perbaiki
+    const newOrderQuantity = [...orderQuantity];
+    newOrderQuantity.splice(index, 1);
+    setOrderQuantity(newOrderQuantity);
   };
 
   // ! handle harga menu perquantity
   const handleSubTotal = (value, id) => {
-    const price = orderMenu.find((dataOrder) => dataOrder.id == id);
+    // mengubah jumlah quantity
+    const newValue = parseInt(value);
+    const menuStock = menu.find((item) => item.id === id).stock;
+    // if (newValue > 0 && newValue <= menu.find((item) => item.id === id).stock) {
+    if (newValue > 0) {
+      const newOrderQuantity = {
+        ...orderQuantity,
+        [id]: newValue,
+      };
 
-    const newData = {
-      id: id,
-      currentSubTotal: price.price * value,
-    };
-    // setSubTotal([...subTotal, newData]);
+      setOrderQuantity(newOrderQuantity);
+
+      //* untuk perubahan stock ketika input berubah
+      // const newMenu = menu.map((item) => {
+      //   if (item.id === id) {
+      //     console.log(item.id);
+      //     const newStock = menuStock - newValue + newOrderQuantity[id];
+      //     return {
+      //       ...item,
+      //       stock: newStock >= 0 ? newStock : 0,
+      //     };
+      //   }
+      //   return item;
+      // });
+      // setMenu(newMenu);
+    }
   };
+
+  // ! handle subtotal per menu
+  const subtotal = (menu) => {
+    return orderQuantity[menu.id] * menu.price;
+  };
+
+  function dataTotal() {
+    let newTotal = 0;
+    console.log(orderMenu);
+    orderMenu.forEach((menu) => {
+      newTotal += subtotal(menu);
+    });
+    setTotal(newTotal);
+  }
 
   useEffect(() => {
     filterProduct();
-    // console.log(searchOrderMenu);
-  }, [foodData, searchName, selectCategory]);
+    dataTotal();
+  }, [foodData, searchName, selectCategory, orderQuantity]);
 
   return (
     <div className="container">
@@ -88,6 +159,9 @@ function App() {
         searchOrderMenu={handleSearchOrderMenu}
         deleteItem={deleteOrderMenu}
         handleSubTotal={handleSubTotal}
+        loadingStatus={skaletonLoading}
+        subTotal={subtotal}
+        total={total.toLocaleString()}
       />
       <Main
         orderMenu={handleOrderMenu}

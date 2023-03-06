@@ -284,7 +284,7 @@ nav .cart-content {
   padding: 0 30px 50px 30px;
   overflow: auto;
   height: 30vh;
-  color: black;
+  color: white;
 }
 
 nav .cart-content::-webkit-scrollbar {
