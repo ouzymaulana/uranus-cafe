@@ -8,15 +8,18 @@ import foodData from "./../src/menu.json";
 import "react-loading-skeleton/dist/skeleton.css";
 
 function App() {
+  const [time, setTime] = useState(new Date());
   const [menu, setMenu] = useState([]);
   const [selectCategory, setSelectCategory] = useState("");
   const [searchName, setSearchName] = useState("");
   const [orderMenu, setOrderMenu] = useState([]);
   const [isLoading, setIsLoading] = useState();
+  const [isLoadingMenu, setIsLoadingMenu] = useState();
   const [skaletonLoading, setSkaletonLoding] = useState(false);
+  const [skaletonLoadingMenu, setSkaletonLodingMenu] = useState(false);
   const [isCategory, setIsCateory] = useState("");
   const [searchOrderMenu, setSearchOrderMenu] = useState([]);
-  const [orderQuantity, setOrderQuantity] = useState({});
+  const [orderQuantity, setOrderQuantity] = useState([]);
   // const [subTotal, setSubTotal] = useState([]);
   const [total, setTotal] = useState([]);
 
@@ -34,6 +37,8 @@ function App() {
       }, 1000);
 
       setIsLoading(newTimer);
+    } else {
+      setSearchOrderMenu([]); //mengosongkan searchOrderMenu ketika inputan kosong
     }
   };
 
@@ -49,54 +54,73 @@ function App() {
   };
 
   const filterProduct = () => {
-    const filteredProducts = foodData.filter((item) => {
-      return (
-        item.menu_name.toLowerCase().includes(searchName.toLowerCase()) &&
-        (selectCategory === "" || item.category === selectCategory)
-      );
-    });
-    setMenu(filteredProducts);
+    clearTimeout(isLoadingMenu);
+    setSkaletonLodingMenu(true);
+    const timer = setTimeout(() => {
+      const filteredProducts = foodData.filter((item) => {
+        return (
+          item.menu_name.toLowerCase().includes(searchName.toLowerCase()) &&
+          (selectCategory === "" || item.category === selectCategory)
+        );
+      });
+      setMenu(filteredProducts);
+      setSkaletonLodingMenu(false);
+    }, 500);
+    setIsLoadingMenu(timer);
   };
 
   // ! penambahan data dalam keranjang
   const handleOrderMenu = (value) => {
-    const menuOrder = menu.find((menuOrder) => menuOrder.id == value.id);
+    if (value.stock > 0) {
+      const menuOrder = menu.find((menuOrder) => menuOrder.id == value.id);
 
-    if (menuOrder.stock > 0) {
-      setOrderMenu([...orderMenu, value]);
-
-      setMenu(
-        menu.map((dataMenu) =>
-          dataMenu.id === value.id
-            ? { ...dataMenu, stock: dataMenu.stock - 1 }
-            : dataMenu
-        )
+      const checkOrderMenu = orderMenu.find(
+        (menuOrder) => menuOrder.id == value.id
       );
+      if (!checkOrderMenu) {
+        setOrderMenu([...orderMenu, value]);
 
-      // diperbaiki
-      setOrderQuantity({
-        ...orderQuantity,
-        [value.id]: (orderQuantity[value.id] || 0) + 1,
-      });
+        setMenu(
+          menu.map((dataMenu) =>
+            dataMenu.id === value.id
+              ? { ...dataMenu, stock: dataMenu.stock - 1 }
+              : dataMenu
+          )
+        );
+
+        setOrderQuantity({
+          ...orderQuantity,
+          [value.id]: 1,
+        });
+        console.log(orderQuantity);
+      }
     } else {
-      alert("maaf, pesanan tersebut sedang kosong");
+      alert("maaf, pesanan tersebut sedang kosong kkk");
     }
-    // setSkaletonLoding(false);
   };
 
   // ! menghapus data dalam keranjang
   const deleteOrderMenu = (value) => {
-    console.log(orderQuantity);
-    // setOrderMenu(orderMenu.filter((dataOrder) => dataOrder.id !== value));
-
-    const index = orderMenu.findIndex((dataOrder) => dataOrder.id === value);
-    const newOrderMenu = [...orderMenu];
-    newOrderMenu.splice(index, 1);
+    const newOrderMenu = orderMenu.filter((item) => item.id !== value);
     setOrderMenu(newOrderMenu);
+    const filteredData = searchOrderMenu.filter((item) => item.id !== value);
+    setSearchOrderMenu(filteredData);
 
-    // perbaiki
-    const newOrderQuantity = [...orderQuantity];
-    newOrderQuantity.splice(index, 1);
+    // * update stock menu ketika order list menu tersebut dihapus
+    const newMenu = menu.map((item) => {
+      if (item.id === value) {
+        return {
+          ...item,
+          stock: orderQuantity[value],
+        };
+      }
+      return item;
+    });
+    setMenu(newMenu);
+
+    // * menghapus quantity order pada state quantity
+    const newOrderQuantity = { ...orderQuantity };
+    delete newOrderQuantity[value.id];
     setOrderQuantity(newOrderQuantity);
   };
 
@@ -105,28 +129,26 @@ function App() {
     // mengubah jumlah quantity
     const newValue = parseInt(value);
     const menuStock = menu.find((item) => item.id === id).stock;
-    // if (newValue > 0 && newValue <= menu.find((item) => item.id === id).stock) {
-    if (newValue > 0) {
+    console.log(menuStock);
+    if (newValue > 0 && menuStock >= 0) {
+      // if (newValue > 0) {
       const newOrderQuantity = {
         ...orderQuantity,
         [id]: newValue,
       };
-
       setOrderQuantity(newOrderQuantity);
 
       //* untuk perubahan stock ketika input berubah
-      // const newMenu = menu.map((item) => {
-      //   if (item.id === id) {
-      //     console.log(item.id);
-      //     const newStock = menuStock - newValue + newOrderQuantity[id];
-      //     return {
-      //       ...item,
-      //       stock: newStock >= 0 ? newStock : 0,
-      //     };
-      //   }
-      //   return item;
-      // });
-      // setMenu(newMenu);
+      const newMenu = menu.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            stock: item.stock + orderQuantity[id] - newValue,
+          };
+        }
+        return item;
+      });
+      setMenu(newMenu);
     }
   };
 
@@ -137,7 +159,6 @@ function App() {
 
   function dataTotal() {
     let newTotal = 0;
-    console.log(orderMenu);
     orderMenu.forEach((menu) => {
       newTotal += subtotal(menu);
     });
@@ -145,15 +166,32 @@ function App() {
   }
 
   useEffect(() => {
-    filterProduct();
     dataTotal();
-  }, [foodData, searchName, selectCategory, orderQuantity]);
+  }, [orderQuantity]);
+
+  // useEffect(() => {
+  //   dataTotal();
+  // }, [menu]);
+
+  useEffect(() => {
+    filterProduct();
+  }, [searchName, selectCategory]);
+
+  useEffect(() => {
+    const waktu = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+    return () => {
+      clearInterval(waktu);
+    };
+  }, []);
 
   return (
     <div className="container">
       <Header search={handleSearching} />
       <Aside />
       <Nav
+        time={time}
         data={orderMenu}
         searchData={searchOrderMenu}
         searchOrderMenu={handleSearchOrderMenu}
@@ -168,6 +206,7 @@ function App() {
         data={menu}
         handleCat={handleCategoryChange}
         categoryActive={isCategory}
+        loadingStatus={skaletonLoadingMenu}
       />
     </div>
   );

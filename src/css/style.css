@@ -211,6 +211,17 @@ main div:last-child .card {
   cursor: pointer;
 }
 
+.card-skeleton {
+  background-color: #c1c1c1;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  margin: 20px 20px;
+  width: 280px;
+  height: 300px;
+  cursor: pointer;
+}
+
 main div:last-child .card img {
   object-fit: cover;
   width: 100%;
@@ -311,8 +322,20 @@ nav .cart-content .cart > div {
   justify-content: space-between;
 }
 
-nav .cart-content .cart > div span {
+nav .cart-content .cart > div > span {
   cursor: pointer;
+}
+
+nav .cart-content .cart > div a {
+  cursor: pointer;
+}
+
+nav .cart-content .cart > div div span {
+  padding: 5px 15px;
+  margin: 0 10px;
+  border-radius: 8px;
+  color: black;
+  background-color: #e9e8e8;
 }
 
 nav .cart-content .cart > div input {
@@ -320,6 +343,7 @@ nav .cart-content .cart > div input {
   width: 2em;
   height: 1em;
   padding: 6px;
+  margin: 0 10px;
   outline: none;
   background-color: #e9e8e8;
   border-radius: 5px;

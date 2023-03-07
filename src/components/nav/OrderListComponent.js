@@ -15,6 +15,7 @@ const OrderListComponent = ({ item, deleteItem, handleSubTotal, subTotal }) => {
             handleSubTotal(event.currentTarget.value, item.id)
           }
         />
+
         <p>{subTotal(item)}</p>
         <span onClick={() => deleteItem(item.id)}>
           <i className="fa-sharp fa-solid fa-xmark"></i>

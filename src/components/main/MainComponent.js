@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import CardComponent from "./CardComponent";
+import LoadingCardMenu from "./LoadingCardMenu";
 
-const MainComponent = ({ data, handleCat, orderMenu, categoryActive }) => {
+const MainComponent = ({
+  data,
+  handleCat,
+  orderMenu,
+  categoryActive,
+  loadingStatus,
+}) => {
   return (
     <main>
       <div>
@@ -52,9 +59,11 @@ const MainComponent = ({ data, handleCat, orderMenu, categoryActive }) => {
         </div>
       </div>
       <div className="main-content">
-        {data.map((result, index) => (
-          <CardComponent orderMenu={orderMenu} data={result} key={index} />
-        ))}
+        {loadingStatus && <LoadingCardMenu />}
+        {!loadingStatus &&
+          data.map((result, index) => (
+            <CardComponent orderMenu={orderMenu} data={result} key={index} />
+          ))}
       </div>
     </main>
   );

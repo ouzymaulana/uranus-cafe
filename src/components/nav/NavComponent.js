@@ -3,6 +3,7 @@ import OrderListComponent from "./OrderListComponent";
 import LoadingOrderMenu from "./LoadingOrderMenu";
 
 const NavComponent = ({
+  time,
   data,
   searchData,
   searchOrderMenu,
@@ -18,7 +19,15 @@ const NavComponent = ({
     <nav>
       <div className="order-list-title">
         <p>Order List</p>
-        <span>Tuesday, Feb 28, 2023 | 09:30:23</span>
+        <span>
+          {time.toLocaleDateString("id-ID", { weekday: "long" })},{" "}
+          {time.toLocaleDateString("id-ID", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}{" "}
+          | {time.toLocaleTimeString("id-ID")}
+        </span>
       </div>
       <div className="search-cart">
         <input
