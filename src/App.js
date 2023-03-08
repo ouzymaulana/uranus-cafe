@@ -20,11 +20,13 @@ function App() {
   const [isCategory, setIsCateory] = useState("");
   const [searchOrderMenu, setSearchOrderMenu] = useState([]);
   const [orderQuantity, setOrderQuantity] = useState([]);
-  // const [subTotal, setSubTotal] = useState([]);
   const [total, setTotal] = useState([]);
+  const [tax, setTax] = useState(0);
+  const [totalPay, setTotalPay] = useState(0);
 
   // ! mencari data dalam keranjang
   const handleSearchOrderMenu = (value) => {
+    console.log(value);
     if (value !== "") {
       clearTimeout(isLoading);
       setSkaletonLoding(true);
@@ -35,10 +37,11 @@ function App() {
         setSearchOrderMenu(result);
         setSkaletonLoding(false);
       }, 1000);
+      console.log(searchOrderMenu);
 
       setIsLoading(newTimer);
     } else {
-      setSearchOrderMenu([]); //mengosongkan searchOrderMenu ketika inputan kosong
+      setSearchOrderMenu(["pencarian tidak ada"]); //mengosongkan searchOrderMenu ketika inputan kosong
     }
   };
 
@@ -53,6 +56,7 @@ function App() {
     setSearchName(value);
   };
 
+  // ! menampilkan list menu
   const filterProduct = () => {
     clearTimeout(isLoadingMenu);
     setSkaletonLodingMenu(true);
@@ -92,7 +96,6 @@ function App() {
           ...orderQuantity,
           [value.id]: 1,
         });
-        console.log(orderQuantity);
       }
     } else {
       alert("maaf, pesanan tersebut sedang kosong kkk");
@@ -127,15 +130,16 @@ function App() {
   // ! handle harga menu perquantity
   const handleSubTotal = (value, id) => {
     // mengubah jumlah quantity
-    const newValue = parseInt(value);
+    const newValue = parseInt(value) - 1;
     const menuStock = menu.find((item) => item.id === id).stock;
-    console.log(menuStock);
     if (newValue > 0 && menuStock >= 0) {
       // if (newValue > 0) {
+
       const newOrderQuantity = {
         ...orderQuantity,
         [id]: newValue,
       };
+
       setOrderQuantity(newOrderQuantity);
 
       //* untuk perubahan stock ketika input berubah
@@ -152,6 +156,38 @@ function App() {
     }
   };
 
+  const incrementQuantity = (value, id) => {
+    console.log(orderQuantity);
+    console.log(value);
+    console.log(id);
+    const newValue = parseInt(value);
+    const currentValue = newValue + 1;
+    const menuStock = menu.find((item) => item.id === id).stock;
+
+    if (menuStock > 0) {
+      // if (newValue > 0) {
+      const newOrderQuantity = {
+        ...orderQuantity,
+        [id]: currentValue,
+      };
+      setOrderQuantity(newOrderQuantity);
+
+      //* untuk perubahan stock ketika input berubah
+      const newMenu = menu.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            stock: item.stock + orderQuantity[id] - currentValue,
+          };
+        }
+        return item;
+      });
+      setMenu(newMenu);
+    } else {
+      alert("maaf, stock habis");
+    }
+  };
+
   // ! handle subtotal per menu
   const subtotal = (menu) => {
     return orderQuantity[menu.id] * menu.price;
@@ -163,11 +199,14 @@ function App() {
       newTotal += subtotal(menu);
     });
     setTotal(newTotal);
+    setTax(newTotal * 0.1);
+    const resultTotalPay = newTotal + tax;
+    setTotalPay(resultTotalPay);
   }
 
   useEffect(() => {
     dataTotal();
-  }, [orderQuantity]);
+  }, [orderQuantity, total]);
 
   // useEffect(() => {
   //   dataTotal();
@@ -196,10 +235,15 @@ function App() {
         searchData={searchOrderMenu}
         searchOrderMenu={handleSearchOrderMenu}
         deleteItem={deleteOrderMenu}
+        quantityValue={orderQuantity}
         handleSubTotal={handleSubTotal}
         loadingStatus={skaletonLoading}
         subTotal={subtotal}
         total={total.toLocaleString()}
+        tax={tax}
+        totalPay={totalPay}
+        incrementQuantity={incrementQuantity}
+        setSearchOrderMenu={setSearchOrderMenu}
       />
       <Main
         orderMenu={handleOrderMenu}

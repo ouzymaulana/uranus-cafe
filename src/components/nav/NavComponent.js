@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import OrderListComponent from "./OrderListComponent";
 import LoadingOrderMenu from "./LoadingOrderMenu";
 
@@ -7,13 +7,30 @@ const NavComponent = ({
   data,
   searchData,
   searchOrderMenu,
+  quantityValue,
   deleteItem,
   handleSubTotal,
   loadingStatus,
   subTotal,
   total,
+  tax,
+  totalPay,
+  incrementQuantity,
+  setSearchOrderMenu,
 }) => {
   const currentData = searchData == "" ? data : searchData;
+  const [searchValue, setSearchValue] = useState("");
+
+  const inputRef = useRef(null);
+  function handleClearSearchValue() {
+    setSearchValue("");
+    inputRef.current.value = "";
+  }
+
+  function handleAddSearchValue(event) {
+    const data = event.target.value;
+    setSearchValue(data);
+  }
 
   return (
     <nav>
@@ -31,12 +48,26 @@ const NavComponent = ({
       </div>
       <div className="search-cart">
         <input
+          ref={inputRef}
           type="text"
           name="search"
           placeholder="Search Something.."
           autoComplete="off"
-          onChange={(event) => searchOrderMenu(event.target.value)}
+          onChange={(event) => {
+            searchOrderMenu(event.target.value);
+            handleAddSearchValue(event);
+            console.log(searchValue);
+          }}
         />
+        {searchValue && (
+          <a
+            onClick={() => {
+              handleClearSearchValue();
+            }}
+          >
+            <i className="fa-sharp fa-solid fa-xmark"></i>
+          </a>
+        )}
         <span className="fa fa-search"></span>
       </div>
       <div className="cart-content">
@@ -45,11 +76,13 @@ const NavComponent = ({
           currentData.map((result, index) => (
             <OrderListComponent
               item={result}
+              quantityValue={quantityValue}
               deleteItem={deleteItem}
               key={index}
               handleSubTotal={handleSubTotal}
               subTotal={subTotal}
               total={total}
+              incrementQuantity={incrementQuantity}
             />
           ))}
       </div>
@@ -60,11 +93,11 @@ const NavComponent = ({
         </div>
         <div className="tax">
           <p>10% Tax</p>
-          <p>74.000</p>
+          <p>{tax.toLocaleString()}</p>
         </div>
         <div className="total">
           <p>Total</p>
-          <p>74.000</p>
+          <p>{totalPay.toLocaleString()}</p>
         </div>
       </div>
       <div className="cart-button">

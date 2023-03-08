@@ -289,6 +289,13 @@ nav .search-cart .fa-search {
   right: 20px;
 }
 
+nav .search-cart a {
+  position: absolute;
+  color: rgb(184, 184, 184);
+  right: 60px;
+  cursor: pointer;
+}
+
 nav .cart-content {
   display: flex;
   flex-direction: column;
