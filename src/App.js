@@ -23,40 +23,40 @@ function App() {
   const [total, setTotal] = useState([]);
   const [tax, setTax] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
+  const [noResult, setNoResult] = useState(false);
 
-  // ! mencari data dalam keranjang
   const handleSearchOrderMenu = (value) => {
     console.log(value);
-    if (value !== "") {
-      clearTimeout(isLoading);
-      setSkaletonLoding(true);
-      const newTimer = setTimeout(() => {
-        const result = orderMenu.filter((data) =>
-          data.menu_name.toLowerCase().includes(value.toLowerCase())
-        );
-        setSearchOrderMenu(result);
-        setSkaletonLoding(false);
-      }, 1000);
-      console.log(searchOrderMenu);
 
-      setIsLoading(newTimer);
-    } else {
-      setSearchOrderMenu(["pencarian tidak ada"]); //mengosongkan searchOrderMenu ketika inputan kosong
-    }
+    clearTimeout(isLoading);
+    setSkaletonLoding(true);
+    const newTimer = setTimeout(() => {
+      const result = orderMenu.filter((data) =>
+        data.menu_name.toLowerCase().includes(value.toLowerCase())
+      );
+
+      setSearchOrderMenu(result);
+      setSkaletonLoding(false);
+
+      if (result.length === 0) {
+        setNoResult(true);
+      } else {
+        setNoResult(false);
+      }
+    }, 1000);
+
+    setIsLoading(newTimer);
   };
 
-  // ! handle search by category
   const handleCategoryChange = (value) => {
     setSelectCategory(value);
     setIsCateory(value);
   };
 
-  // ! handle search by input
   const handleSearching = (value) => {
     setSearchName(value);
   };
 
-  // ! menampilkan list menu
   const filterProduct = () => {
     clearTimeout(isLoadingMenu);
     setSkaletonLodingMenu(true);
@@ -73,7 +73,6 @@ function App() {
     setIsLoadingMenu(timer);
   };
 
-  // ! penambahan data dalam keranjang
   const handleOrderMenu = (value) => {
     if (value.stock > 0) {
       const menuOrder = menu.find((menuOrder) => menuOrder.id == value.id);
@@ -96,13 +95,25 @@ function App() {
           ...orderQuantity,
           [value.id]: 1,
         });
+      } else {
+        setMenu(
+          menu.map((dataMenu) =>
+            dataMenu.id === value.id
+              ? { ...dataMenu, stock: dataMenu.stock - 1 }
+              : dataMenu
+          )
+        );
+
+        setOrderQuantity({
+          ...orderQuantity,
+          [value.id]: orderQuantity[value.id] + 1,
+        });
       }
     } else {
-      alert("maaf, pesanan tersebut sedang kosong kkk");
+      alert("maaf, pesanan tersebut sedang kosong");
     }
   };
 
-  // ! menghapus data dalam keranjang
   const deleteOrderMenu = (value) => {
     const newOrderMenu = orderMenu.filter((item) => item.id !== value);
     setOrderMenu(newOrderMenu);
@@ -127,10 +138,9 @@ function App() {
     setOrderQuantity(newOrderQuantity);
   };
 
-  // ! handle harga menu perquantity
   const handleSubTotal = (value, id) => {
     // mengubah jumlah quantity
-    const newValue = parseInt(value) - 1;
+    const newValue = orderQuantity[id] - parseInt(value);
     const menuStock = menu.find((item) => item.id === id).stock;
     if (newValue > 0 && menuStock >= 0) {
       // if (newValue > 0) {
@@ -157,11 +167,8 @@ function App() {
   };
 
   const incrementQuantity = (value, id) => {
-    console.log(orderQuantity);
-    console.log(value);
-    console.log(id);
     const newValue = parseInt(value);
-    const currentValue = newValue + 1;
+    const currentValue = newValue + orderQuantity[id];
     const menuStock = menu.find((item) => item.id === id).stock;
 
     if (menuStock > 0) {
@@ -170,6 +177,7 @@ function App() {
         ...orderQuantity,
         [id]: currentValue,
       };
+
       setOrderQuantity(newOrderQuantity);
 
       //* untuk perubahan stock ketika input berubah
@@ -188,7 +196,6 @@ function App() {
     }
   };
 
-  // ! handle subtotal per menu
   const subtotal = (menu) => {
     return orderQuantity[menu.id] * menu.price;
   };
@@ -219,7 +226,7 @@ function App() {
   useEffect(() => {
     const waktu = setInterval(() => {
       setTime(new Date());
-    }, 1000);
+    }, 60000);
     return () => {
       clearInterval(waktu);
     };
@@ -244,6 +251,7 @@ function App() {
         totalPay={totalPay}
         incrementQuantity={incrementQuantity}
         setSearchOrderMenu={setSearchOrderMenu}
+        noResult={noResult}
       />
       <Main
         orderMenu={handleOrderMenu}

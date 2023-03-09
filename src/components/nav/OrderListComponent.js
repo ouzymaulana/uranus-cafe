@@ -26,10 +26,7 @@ const OrderListComponent = ({
         <div>
           <a
             onClick={() => {
-              incrementQuantity(
-                document.getElementById("quantity").innerHTML,
-                item.id
-              );
+              incrementQuantity(1, item.id);
             }}
           >
             <i className="fa-solid fa-plus"></i>
@@ -37,10 +34,7 @@ const OrderListComponent = ({
           <span id="quantity">{quantityValue[item.id]}</span>
           <a
             onClick={() => {
-              handleSubTotal(
-                document.getElementById("quantity").innerHTML,
-                item.id
-              );
+              handleSubTotal(1, item.id);
             }}
           >
             <i className="fa-solid fa-minus"></i>

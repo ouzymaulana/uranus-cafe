@@ -298,6 +298,7 @@ nav .search-cart a {
 
 nav .cart-content {
   display: flex;
+  position: relative;
   flex-direction: column;
   padding: 0 30px 50px 30px;
   overflow: auto;
@@ -312,6 +313,14 @@ nav .cart-content::-webkit-scrollbar {
 ::-webkit-scrollbar-thumb {
   background-color: #c1c1c1;
   border-radius: 10px;
+}
+
+nav .cart-content > span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #c1c1c1;
 }
 
 nav .cart-content .cart {
@@ -372,7 +381,6 @@ nav .cart-content .cart-item-skeleton {
   flex-direction: row;
   justify-content: space-between;
 }
-
 /* ! */
 
 nav .subtotal-tax-total {
@@ -409,10 +417,26 @@ nav .cart-button a {
   border-radius: 6px;
   color: white;
   padding: 20px 30px;
+  /* padding: 20px 30px; */
   border: 2px solid white;
 }
 nav .cart-button a:last-child {
   flex: 2.8;
   background-color: #ff5f9e;
   border: none;
+}
+
+nav .cart-button a:last-child div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+nav .cart-button a:last-child span {
+  font-size: 20px;
+  font-weight: 600;
+}
+.fa-arrow-right {
+  padding: 0 30px;
 }

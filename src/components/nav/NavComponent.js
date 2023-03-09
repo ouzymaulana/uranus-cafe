@@ -17,6 +17,7 @@ const NavComponent = ({
   totalPay,
   incrementQuantity,
   setSearchOrderMenu,
+  noResult,
 }) => {
   const currentData = searchData == "" ? data : searchData;
   const [searchValue, setSearchValue] = useState("");
@@ -25,6 +26,7 @@ const NavComponent = ({
   function handleClearSearchValue() {
     setSearchValue("");
     inputRef.current.value = "";
+    searchOrderMenu("");
   }
 
   function handleAddSearchValue(event) {
@@ -43,7 +45,11 @@ const NavComponent = ({
             month: "long",
             day: "numeric",
           })}{" "}
-          | {time.toLocaleTimeString("id-ID")}
+          |{" "}
+          {time.toLocaleTimeString("id-ID", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
         </span>
       </div>
       <div className="search-cart">
@@ -72,19 +78,28 @@ const NavComponent = ({
       </div>
       <div className="cart-content">
         {loadingStatus && searchData && <LoadingOrderMenu />}
-        {!loadingStatus &&
-          currentData.map((result, index) => (
-            <OrderListComponent
-              item={result}
-              quantityValue={quantityValue}
-              deleteItem={deleteItem}
-              key={index}
-              handleSubTotal={handleSubTotal}
-              subTotal={subTotal}
-              total={total}
-              incrementQuantity={incrementQuantity}
-            />
-          ))}
+        {!loadingStatus && (
+          <>
+            {noResult ? (
+              <span id="noResultSearchOrderMenu">
+                pencarian tidak ditemukan
+              </span>
+            ) : (
+              currentData.map((result, index) => (
+                <OrderListComponent
+                  item={result}
+                  quantityValue={quantityValue}
+                  deleteItem={deleteItem}
+                  key={index}
+                  handleSubTotal={handleSubTotal}
+                  subTotal={subTotal}
+                  total={total}
+                  incrementQuantity={incrementQuantity}
+                />
+              ))
+            )}
+          </>
+        )}
       </div>
       <div className="subtotal-tax-total">
         <div className="subtotal">
@@ -108,7 +123,9 @@ const NavComponent = ({
           <i className="fa-regular fa-file fa-xl"></i>
         </a>
         <a href="">
-          PAY <i className="fa-solid fa-arrow-right fa-xl"></i>
+          <div>
+            <span>PAY</span> <i className="fa-solid fa-arrow-right fa-2xl"></i>
+          </div>
         </a>
       </div>
     </nav>
