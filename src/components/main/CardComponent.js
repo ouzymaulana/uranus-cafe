@@ -1,8 +1,8 @@
 import React from "react";
 
-const CardComponent = ({ data, orderMenu }) => {
+const CardComponent = ({ data, addOrderList }) => {
   return (
-    <div className="card" onClick={() => orderMenu(data)}>
+    <div className="card" onClick={() => addOrderList(data)}>
       <img
         src={require(`../../assets/img/${data.gambar}`)}
         alt="gambar"

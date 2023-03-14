@@ -4,76 +4,16 @@ import Aside from "./components/aside/AsideComponent";
 import Header from "./components/header/HeaderComponent";
 import Nav from "./components/nav/NavComponent.js";
 import Main from "./components/main/MainComponent";
-import foodData from "./../src/menu.json";
 import "react-loading-skeleton/dist/skeleton.css";
 
 function App() {
-  const [time, setTime] = useState(new Date());
+  // const [menu, setMenu] = useState(foodData);
   const [menu, setMenu] = useState([]);
-  const [selectCategory, setSelectCategory] = useState("");
   const [searchName, setSearchName] = useState("");
   const [orderMenu, setOrderMenu] = useState([]);
-  const [isLoading, setIsLoading] = useState();
-  const [isLoadingMenu, setIsLoadingMenu] = useState();
-  const [skaletonLoading, setSkaletonLoding] = useState(false);
-  const [skaletonLoadingMenu, setSkaletonLodingMenu] = useState(false);
-  const [isCategory, setIsCateory] = useState("");
-  const [searchOrderMenu, setSearchOrderMenu] = useState([]);
   const [orderQuantity, setOrderQuantity] = useState([]);
-  const [total, setTotal] = useState([]);
-  const [tax, setTax] = useState(0);
-  const [totalPay, setTotalPay] = useState(0);
-  const [noResult, setNoResult] = useState(false);
 
-  const handleSearchOrderMenu = (value) => {
-    console.log(value);
-
-    clearTimeout(isLoading);
-    setSkaletonLoding(true);
-    const newTimer = setTimeout(() => {
-      const result = orderMenu.filter((data) =>
-        data.menu_name.toLowerCase().includes(value.toLowerCase())
-      );
-
-      setSearchOrderMenu(result);
-      setSkaletonLoding(false);
-
-      if (result.length === 0) {
-        setNoResult(true);
-      } else {
-        setNoResult(false);
-      }
-    }, 1000);
-
-    setIsLoading(newTimer);
-  };
-
-  const handleCategoryChange = (value) => {
-    setSelectCategory(value);
-    setIsCateory(value);
-  };
-
-  const handleSearching = (value) => {
-    setSearchName(value);
-  };
-
-  const filterProduct = () => {
-    clearTimeout(isLoadingMenu);
-    setSkaletonLodingMenu(true);
-    const timer = setTimeout(() => {
-      const filteredProducts = foodData.filter((item) => {
-        return (
-          item.menu_name.toLowerCase().includes(searchName.toLowerCase()) &&
-          (selectCategory === "" || item.category === selectCategory)
-        );
-      });
-      setMenu(filteredProducts);
-      setSkaletonLodingMenu(false);
-    }, 500);
-    setIsLoadingMenu(timer);
-  };
-
-  const handleOrderMenu = (value) => {
+  const addOrderList = (value) => {
     if (value.stock > 0) {
       const menuOrder = menu.find((menuOrder) => menuOrder.id == value.id);
 
@@ -85,7 +25,7 @@ function App() {
 
         setMenu(
           menu.map((dataMenu) =>
-            dataMenu.id === value.id
+            dataMenu.id == value.id
               ? { ...dataMenu, stock: dataMenu.stock - 1 }
               : dataMenu
           )
@@ -114,151 +54,23 @@ function App() {
     }
   };
 
-  const deleteOrderMenu = (value) => {
-    const newOrderMenu = orderMenu.filter((item) => item.id !== value);
-    setOrderMenu(newOrderMenu);
-    const filteredData = searchOrderMenu.filter((item) => item.id !== value);
-    setSearchOrderMenu(filteredData);
-
-    // * update stock menu ketika order list menu tersebut dihapus
-    const newMenu = menu.map((item) => {
-      if (item.id === value) {
-        return {
-          ...item,
-          stock: orderQuantity[value],
-        };
-      }
-      return item;
-    });
-    setMenu(newMenu);
-
-    // * menghapus quantity order pada state quantity
-    const newOrderQuantity = { ...orderQuantity };
-    delete newOrderQuantity[value.id];
-    setOrderQuantity(newOrderQuantity);
-  };
-
-  const handleSubTotal = (value, id) => {
-    // mengubah jumlah quantity
-    const newValue = orderQuantity[id] - parseInt(value);
-    const menuStock = menu.find((item) => item.id === id).stock;
-    if (newValue > 0 && menuStock >= 0) {
-      // if (newValue > 0) {
-
-      const newOrderQuantity = {
-        ...orderQuantity,
-        [id]: newValue,
-      };
-
-      setOrderQuantity(newOrderQuantity);
-
-      //* untuk perubahan stock ketika input berubah
-      const newMenu = menu.map((item) => {
-        if (item.id === id) {
-          return {
-            ...item,
-            stock: item.stock + orderQuantity[id] - newValue,
-          };
-        }
-        return item;
-      });
-      setMenu(newMenu);
-    }
-  };
-
-  const incrementQuantity = (value, id) => {
-    const newValue = parseInt(value);
-    const currentValue = newValue + orderQuantity[id];
-    const menuStock = menu.find((item) => item.id === id).stock;
-
-    if (menuStock > 0) {
-      // if (newValue > 0) {
-      const newOrderQuantity = {
-        ...orderQuantity,
-        [id]: currentValue,
-      };
-
-      setOrderQuantity(newOrderQuantity);
-
-      //* untuk perubahan stock ketika input berubah
-      const newMenu = menu.map((item) => {
-        if (item.id === id) {
-          return {
-            ...item,
-            stock: item.stock + orderQuantity[id] - currentValue,
-          };
-        }
-        return item;
-      });
-      setMenu(newMenu);
-    } else {
-      alert("maaf, stock habis");
-    }
-  };
-
-  const subtotal = (menu) => {
-    return orderQuantity[menu.id] * menu.price;
-  };
-
-  function dataTotal() {
-    let newTotal = 0;
-    orderMenu.forEach((menu) => {
-      newTotal += subtotal(menu);
-    });
-    setTotal(newTotal);
-    setTax(newTotal * 0.1);
-    const resultTotalPay = newTotal + tax;
-    setTotalPay(resultTotalPay);
-  }
-
-  useEffect(() => {
-    dataTotal();
-  }, [orderQuantity, total]);
-
-  // useEffect(() => {
-  //   dataTotal();
-  // }, [menu]);
-
-  useEffect(() => {
-    filterProduct();
-  }, [searchName, selectCategory]);
-
-  useEffect(() => {
-    const waktu = setInterval(() => {
-      setTime(new Date());
-    }, 60000);
-    return () => {
-      clearInterval(waktu);
-    };
-  }, []);
-
   return (
     <div className="container">
-      <Header search={handleSearching} />
+      <Header search={setSearchName} />
       <Aside />
       <Nav
-        time={time}
-        data={orderMenu}
-        searchData={searchOrderMenu}
-        searchOrderMenu={handleSearchOrderMenu}
-        deleteItem={deleteOrderMenu}
+        orderMenu={orderMenu}
         quantityValue={orderQuantity}
-        handleSubTotal={handleSubTotal}
-        loadingStatus={skaletonLoading}
-        subTotal={subtotal}
-        total={total.toLocaleString()}
-        tax={tax}
-        totalPay={totalPay}
-        incrementQuantity={incrementQuantity}
-        setSearchOrderMenu={setSearchOrderMenu}
-        noResult={noResult}
+        setOrderQuantity={setOrderQuantity}
+        menu={menu}
+        setMenu={setMenu}
+        setOrderMenu={setOrderMenu}
       />
       <Main
-        orderMenu={handleOrderMenu}
-        data={menu}
-        handleCat={handleCategoryChange}
-        categoryActive={isCategory}
-        loadingStatus={skaletonLoadingMenu}
+        addOrderList={addOrderList}
+        menu={menu}
+        setMenu={setMenu}
+        searchName={searchName}
       />
     </div>
   );

@@ -1,74 +1,75 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CardComponent from "./CardComponent";
 import LoadingCardMenu from "./LoadingCardMenu";
+import foodData from "./../../../src/menu.json";
 
-const MainComponent = ({
-  data,
-  handleCat,
-  orderMenu,
-  categoryActive,
-  loadingStatus,
-}) => {
+const MainComponent = ({ menu, addOrderList, searchName, setMenu }) => {
+  const [listMenu, setListMenu] = useState([]);
+  const [isLoadingMenu, setIsLoadingMenu] = useState();
+  const [skaletonLoadingMenu, setSkaletonLodingMenu] = useState(false);
+  const [selectCategory, setSelectCategory] = useState("");
+  const [isCategory, setIsCategory] = useState("");
+
+  const dataCategory = ["", "appetizer", "main course", "dessert", "drink"];
+
+  const filterProduct = () => {
+    clearTimeout(isLoadingMenu);
+    setSkaletonLodingMenu(true);
+    const timer = setTimeout(() => {
+      // const filteredProducts = menu.filter((item) => {
+      const filteredProducts = foodData.filter((item) => {
+        return (
+          item.menu_name.toLowerCase().includes(searchName.toLowerCase()) &&
+          (selectCategory === "" || item.category === selectCategory)
+        );
+      });
+      // setListMenu(filteredProducts);
+      setMenu(filteredProducts);
+      setSkaletonLodingMenu(false);
+    }, 500);
+    setIsLoadingMenu(timer);
+  };
+
+  useEffect(() => {
+    filterProduct();
+  }, [searchName, selectCategory]);
+
   return (
     <main>
       <div>
         <div className="menu-main">
-          <a
-            className={categoryActive === "" ? "active" : ""}
-            onClick={() => {
-              handleCat("");
-            }}
-          >
-            All
-          </a>
-          <a
-            className={categoryActive === "appetizer" ? "active" : ""}
-            onClick={() => {
-              handleCat("appetizer");
-            }}
-          >
-            Appetizer
-          </a>
-          <a
-            className={categoryActive === "main course" ? "active" : ""}
-            onClick={() => {
-              handleCat("main course");
-            }}
-          >
-            Main Course
-          </a>
-          <a
-            className={categoryActive === "dessert" ? "active" : ""}
-            onClick={() => {
-              handleCat("dessert");
-            }}
-          >
-            Dessert
-          </a>
-          <a
-            className={categoryActive === "drink" ? "active" : ""}
-            onClick={() => {
-              handleCat("drink");
-            }}
-          >
-            Drink
-          </a>
+          {dataCategory.map((result, index) => {
+            return (
+              <a
+                key={index}
+                className={setIsCategory === result ? "active" : ""}
+                onClick={() => {
+                  // handleCat("");
+                  setSelectCategory(result);
+                }}
+              >
+                {result == "" ? "All" : result}
+              </a>
+            );
+          })}
         </div>
         <div className="icon-menu-main">
           <i className="fa-solid fa-bars fa-xl"></i>
         </div>
       </div>
       <div className="main-content">
-        {loadingStatus && <LoadingCardMenu />}
-        {!loadingStatus &&
-          data.map((result, index) => (
-            <CardComponent orderMenu={orderMenu} data={result} key={index} />
+        {skaletonLoadingMenu && <LoadingCardMenu />}
+        {!skaletonLoadingMenu &&
+          menu.map((result, index) => (
+            <CardComponent
+              addOrderList={addOrderList}
+              data={result}
+              key={index}
+            />
           ))}
       </div>
     </main>
   );
 };
-
-// <i class="fa-sharp fa-solid fa-arrow-right-from-arc"></i>
 
 export default MainComponent;

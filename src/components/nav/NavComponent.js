@@ -1,84 +1,74 @@
 import React, { useEffect, useRef, useState } from "react";
 import OrderListComponent from "./OrderListComponent";
 import LoadingOrderMenu from "./LoadingOrderMenu";
+import HeaderOrderListComponent from "./HeaderOrderListComponent";
+import SearchOrderListComponent from "./SearchOrderListComponent";
+import ButtonCartComponent from "./ButtonCartComponent";
 
 const NavComponent = ({
-  time,
-  data,
-  searchData,
-  searchOrderMenu,
+  orderMenu,
   quantityValue,
-  deleteItem,
-  handleSubTotal,
-  loadingStatus,
-  subTotal,
-  total,
-  tax,
-  totalPay,
-  incrementQuantity,
-  setSearchOrderMenu,
-  noResult,
+  setOrderQuantity,
+  menu,
+  setMenu,
+  setOrderMenu,
+  // searchData,
+  // searchOrderMenu,
+  // deleteItem,
+  // handleSubTotal,
+  // loadingStatus,
+  // subTotal,
+  // total,
+  // tax,
+  // totalPay,
+  // incrementQuantity,
+  // setSearchOrderMenu,
+  // noResult,
 }) => {
-  const currentData = searchData == "" ? data : searchData;
-  const [searchValue, setSearchValue] = useState("");
+  const [skaletonLoading, setSkaletonLoding] = useState(false);
+  const [searchOrderMenu, setSearchOrderMenu] = useState([]);
+  const [noResult, setNoResult] = useState(false);
+  const [total, setTotal] = useState([]);
+  const [tax, setTax] = useState(0);
+  const [totalPay, setTotalPay] = useState(0);
 
-  const inputRef = useRef(null);
-  function handleClearSearchValue() {
-    setSearchValue("");
-    inputRef.current.value = "";
-    searchOrderMenu("");
+  const subTotal = (menu) => {
+    const result = quantityValue[menu.id] * menu.price;
+    return result;
+  };
+
+  function dataTotal() {
+    let newTotal = 0;
+    orderMenu.forEach((menu) => {
+      newTotal += subTotal(menu);
+    });
+    setTotal(newTotal);
+    setTax(newTotal * 0.1);
+    const resultTotalPay = newTotal + tax;
+    setTotalPay(resultTotalPay);
   }
 
-  function handleAddSearchValue(event) {
-    const data = event.target.value;
-    setSearchValue(data);
-  }
+  useEffect(() => {
+    dataTotal();
+  }, [quantityValue, total]);
+
+  // const currentData = searchData == "" ? data : searchData;
+  const currentData = searchOrderMenu == "" ? orderMenu : searchOrderMenu;
 
   return (
     <nav>
-      <div className="order-list-title">
-        <p>Order List</p>
-        <span>
-          {time.toLocaleDateString("id-ID", { weekday: "long" })},{" "}
-          {time.toLocaleDateString("id-ID", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}{" "}
-          |{" "}
-          {time.toLocaleTimeString("id-ID", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </span>
-      </div>
-      <div className="search-cart">
-        <input
-          ref={inputRef}
-          type="text"
-          name="search"
-          placeholder="Search Something.."
-          autoComplete="off"
-          onChange={(event) => {
-            searchOrderMenu(event.target.value);
-            handleAddSearchValue(event);
-            console.log(searchValue);
-          }}
-        />
-        {searchValue && (
-          <a
-            onClick={() => {
-              handleClearSearchValue();
-            }}
-          >
-            <i className="fa-sharp fa-solid fa-xmark"></i>
-          </a>
-        )}
-        <span className="fa fa-search"></span>
-      </div>
+      <HeaderOrderListComponent />
+      <SearchOrderListComponent
+        setSkaletonLoding={setSkaletonLoding}
+        setSearchOrderMenu={setSearchOrderMenu}
+        orderMenu={orderMenu}
+        setNoResult={setNoResult}
+      />
       <div className="cart-content">
-        {loadingStatus && searchData && <LoadingOrderMenu />}
-        {!loadingStatus && (
+        {/* {loadingStatus && searchData && <LoadingOrderMenu />}
+        {!loadingStatus && ( */}
+        {skaletonLoading && searchOrderMenu && <LoadingOrderMenu />}
+        {!skaletonLoading && (
           <>
             {noResult ? (
               <span id="noResultSearchOrderMenu">
@@ -87,14 +77,18 @@ const NavComponent = ({
             ) : (
               currentData.map((result, index) => (
                 <OrderListComponent
-                  item={result}
-                  quantityValue={quantityValue}
-                  deleteItem={deleteItem}
                   key={index}
-                  handleSubTotal={handleSubTotal}
+                  item={result}
                   subTotal={subTotal}
-                  total={total}
-                  incrementQuantity={incrementQuantity}
+                  quantityValue={quantityValue}
+                  setOrderQuantity={setOrderQuantity}
+                  menu={menu}
+                  setMenu={setMenu}
+                  orderMenu={orderMenu}
+                  setOrderMenu={setOrderMenu}
+                  searchOrderMenu={searchOrderMenu}
+                  setSearchOrderMenu={setSearchOrderMenu}
+                  setNoResult={setNoResult}
                 />
               ))
             )}
@@ -115,19 +109,7 @@ const NavComponent = ({
           <p>{totalPay.toLocaleString()}</p>
         </div>
       </div>
-      <div className="cart-button">
-        <a href="">
-          <i className="fa-regular fa-floppy-disk fa-xl"></i>
-        </a>
-        <a href="">
-          <i className="fa-regular fa-file fa-xl"></i>
-        </a>
-        <a href="">
-          <div>
-            <span>PAY</span> <i className="fa-solid fa-arrow-right fa-2xl"></i>
-          </div>
-        </a>
-      </div>
+      <ButtonCartComponent />
     </nav>
   );
 };
