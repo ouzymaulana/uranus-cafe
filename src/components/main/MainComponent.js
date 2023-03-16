@@ -12,6 +12,8 @@ const MainComponent = ({ menu, addOrderList, searchName, setMenu }) => {
 
   const dataCategory = ["", "appetizer", "main course", "dessert", "drink"];
 
+  const getOrderMenu = JSON.parse(localStorage.getItem("orderMenu"));
+
   const filterProduct = () => {
     clearTimeout(isLoadingMenu);
     setSkaletonLodingMenu(true);
@@ -23,8 +25,20 @@ const MainComponent = ({ menu, addOrderList, searchName, setMenu }) => {
           (selectCategory === "" || item.category === selectCategory)
         );
       });
+
+      const checkStockMenu = filteredProducts.map((dataMenu) => {
+        const orderMenu = getOrderMenu
+          ? getOrderMenu.find((order) => order.value.id === dataMenu.id)
+          : null;
+        if (orderMenu) {
+          return { ...dataMenu, stock: dataMenu.stock - orderMenu.quantity };
+        } else {
+          return dataMenu;
+        }
+      });
+
       // setListMenu(filteredProducts);
-      setMenu(filteredProducts);
+      setMenu(checkStockMenu);
       setSkaletonLodingMenu(false);
     }, 500);
     setIsLoadingMenu(timer);

@@ -1,59 +1,25 @@
 import React, { useEffect, useRef, useState } from "react";
 import OrderListComponent from "./OrderListComponent";
-import LoadingOrderMenu from "./LoadingOrderMenu";
+import LoadingOrderMenu from "./loadingComponent/LoadingOrderMenu";
 import HeaderOrderListComponent from "./HeaderOrderListComponent";
 import SearchOrderListComponent from "./SearchOrderListComponent";
 import ButtonCartComponent from "./ButtonCartComponent";
+import OrderSummary from "./OrderSummary";
 
-const NavComponent = ({
-  orderMenu,
-  quantityValue,
-  setOrderQuantity,
-  menu,
-  setMenu,
-  setOrderMenu,
-  // searchData,
-  // searchOrderMenu,
-  // deleteItem,
-  // handleSubTotal,
-  // loadingStatus,
-  // subTotal,
-  // total,
-  // tax,
-  // totalPay,
-  // incrementQuantity,
-  // setSearchOrderMenu,
-  // noResult,
-}) => {
+const NavComponent = ({ orderMenu, menu, setMenu, setOrderMenu }) => {
   const [skaletonLoading, setSkaletonLoding] = useState(false);
   const [searchOrderMenu, setSearchOrderMenu] = useState([]);
   const [noResult, setNoResult] = useState(false);
-  const [total, setTotal] = useState([]);
-  const [tax, setTax] = useState(0);
-  const [totalPay, setTotalPay] = useState(0);
+  const [searchValue, setSearchValue] = useState("");
 
-  const subTotal = (menu) => {
-    const result = quantityValue[menu.id] * menu.price;
+  const getOrderMenu = JSON.parse(localStorage.getItem("orderMenu"));
+
+  const subTotal = (value) => {
+    const result = value.quantity * value.value.price;
     return result;
   };
 
-  function dataTotal() {
-    let newTotal = 0;
-    orderMenu.forEach((menu) => {
-      newTotal += subTotal(menu);
-    });
-    setTotal(newTotal);
-    setTax(newTotal * 0.1);
-    const resultTotalPay = newTotal + tax;
-    setTotalPay(resultTotalPay);
-  }
-
-  useEffect(() => {
-    dataTotal();
-  }, [quantityValue, total]);
-
-  // const currentData = searchData == "" ? data : searchData;
-  const currentData = searchOrderMenu == "" ? orderMenu : searchOrderMenu;
+  const currentData = searchOrderMenu == "" ? getOrderMenu : searchOrderMenu;
 
   return (
     <nav>
@@ -63,6 +29,8 @@ const NavComponent = ({
         setSearchOrderMenu={setSearchOrderMenu}
         orderMenu={orderMenu}
         setNoResult={setNoResult}
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
       />
       <div className="cart-content">
         {/* {loadingStatus && searchData && <LoadingOrderMenu />}
@@ -74,14 +42,13 @@ const NavComponent = ({
               <span id="noResultSearchOrderMenu">
                 pencarian tidak ditemukan
               </span>
-            ) : (
+            ) : currentData && Array.isArray(currentData) ? (
+              // currentData.map((result, index) => (
               currentData.map((result, index) => (
                 <OrderListComponent
                   key={index}
                   item={result}
                   subTotal={subTotal}
-                  quantityValue={quantityValue}
-                  setOrderQuantity={setOrderQuantity}
                   menu={menu}
                   setMenu={setMenu}
                   orderMenu={orderMenu}
@@ -89,26 +56,16 @@ const NavComponent = ({
                   searchOrderMenu={searchOrderMenu}
                   setSearchOrderMenu={setSearchOrderMenu}
                   setNoResult={setNoResult}
+                  searchValue={searchValue}
                 />
               ))
+            ) : (
+              <span id="noResultSearchOrderMenu">Keranjang pesanan kosong</span>
             )}
           </>
         )}
       </div>
-      <div className="subtotal-tax-total">
-        <div className="subtotal">
-          <p>Subtotal</p>
-          <p>{total}</p>
-        </div>
-        <div className="tax">
-          <p>10% Tax</p>
-          <p>{tax.toLocaleString()}</p>
-        </div>
-        <div className="total">
-          <p>Total</p>
-          <p>{totalPay.toLocaleString()}</p>
-        </div>
-      </div>
+      <OrderSummary subTotal={subTotal} orderMenu={currentData} />
       <ButtonCartComponent />
     </nav>
   );

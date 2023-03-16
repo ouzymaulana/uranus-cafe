@@ -5,16 +5,19 @@ const SearchOrderListComponent = ({
   setSkaletonLoding,
   orderMenu,
   setNoResult,
+  searchValue,
+  setSearchValue,
 }) => {
-  const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState();
 
   const handleSearchOrderMenu = (value) => {
     clearTimeout(isLoading);
     setSkaletonLoding(true);
+    const getOrderMenu = JSON.parse(localStorage.getItem("orderMenu"));
+
     const newTimer = setTimeout(() => {
-      const result = orderMenu.filter((data) =>
-        data.menu_name.toLowerCase().includes(value.toLowerCase())
+      const result = getOrderMenu.filter((data) =>
+        data.value.menu_name.toLowerCase().includes(value.toLowerCase())
       );
 
       setSearchOrderMenu(result);

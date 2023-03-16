@@ -1,27 +1,59 @@
 import React, { useEffect, useState } from "react";
 import "./css/style.css";
-import Aside from "./components/aside/AsideComponent";
+import Aside from "./components/sidebarMenu/AsideComponent";
 import Header from "./components/header/HeaderComponent";
-import Nav from "./components/nav/NavComponent.js";
+import Nav from "./components/orderListComponent/OrderComponent.js";
 import Main from "./components/main/MainComponent";
 import "react-loading-skeleton/dist/skeleton.css";
 
 function App() {
-  // const [menu, setMenu] = useState(foodData);
   const [menu, setMenu] = useState([]);
   const [searchName, setSearchName] = useState("");
   const [orderMenu, setOrderMenu] = useState([]);
-  const [orderQuantity, setOrderQuantity] = useState([]);
 
   const addOrderList = (value) => {
     if (value.stock > 0) {
-      const menuOrder = menu.find((menuOrder) => menuOrder.id == value.id);
-
-      const checkOrderMenu = orderMenu.find(
-        (menuOrder) => menuOrder.id == value.id
-      );
+      // const checkOrderMenu = orderMenu.find(
+      //   (menuOrder) => menuOrder.id == value.id
+      // );
+      const getOrderMenu = JSON.parse(localStorage.getItem("orderMenu"));
+      let checkOrderMenu;
+      if (getOrderMenu) {
+        checkOrderMenu = getOrderMenu.find(
+          (dataOrderMenu) => dataOrderMenu.value.id === value.id
+        );
+      }
       if (!checkOrderMenu) {
-        setOrderMenu([...orderMenu, value]);
+        // setOrderMenu([...orderMenu, value]);
+        // const currentOrderMenu = [...orderMenu, value];
+        const savedOrderMenu = JSON.parse(localStorage.getItem("orderMenu"));
+
+        let newOrderMenu;
+        if (savedOrderMenu && Array.isArray(savedOrderMenu)) {
+          if (
+            savedOrderMenu === null ||
+            !savedOrderMenu.some((menu) => menu.id === value.id)
+          ) {
+            newOrderMenu = [
+              ...savedOrderMenu,
+              {
+                value,
+                quantity: 1,
+              },
+            ];
+            // newOrderMenu = [...savedOrderMenu, value];
+            // console.log(newOrderMenu);
+            // console.log("data bukan pertama kali");
+          }
+        } else {
+          // newOrderMenu = [value];
+          newOrderMenu = [{ value, quantity: 1 }];
+          // console.log(newOrderMenu);
+          // console.log("data pertama kali");
+        }
+
+        localStorage.setItem("orderMenu", JSON.stringify(newOrderMenu));
+        // setOrderMenu(currentOrderMenu);
 
         setMenu(
           menu.map((dataMenu) =>
@@ -31,11 +63,12 @@ function App() {
           )
         );
 
-        setOrderQuantity({
-          ...orderQuantity,
-          [value.id]: 1,
-        });
+        // setOrderQuantity({
+        //   ...orderQuantity,
+        //   [value.id]: 1,
+        // });
       } else {
+        console.log("masuk kesini bro");
         setMenu(
           menu.map((dataMenu) =>
             dataMenu.id === value.id
@@ -44,10 +77,22 @@ function App() {
           )
         );
 
-        setOrderQuantity({
-          ...orderQuantity,
-          [value.id]: orderQuantity[value.id] + 1,
-        });
+        // setOrderQuantity({
+        //   ...orderQuantity,
+        //   [value.id]: orderQuantity[value.id] + 1,
+        // });
+
+        if (getOrderMenu && Array.isArray(getOrderMenu)) {
+          const setOrderMenuLocalStorage = getOrderMenu.map((orderMenu) => {
+            return orderMenu.value.id === value.id
+              ? { ...orderMenu, quantity: orderMenu.quantity + 1 }
+              : orderMenu;
+          });
+          localStorage.setItem(
+            "orderMenu",
+            JSON.stringify(setOrderMenuLocalStorage)
+          );
+        }
       }
     } else {
       alert("maaf, pesanan tersebut sedang kosong");
@@ -60,8 +105,6 @@ function App() {
       <Aside />
       <Nav
         orderMenu={orderMenu}
-        quantityValue={orderQuantity}
-        setOrderQuantity={setOrderQuantity}
         menu={menu}
         setMenu={setMenu}
         setOrderMenu={setOrderMenu}
