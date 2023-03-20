@@ -16,7 +16,7 @@ const SearchOrderListComponent = ({
     const getOrderMenu = JSON.parse(localStorage.getItem("orderMenu"));
 
     const newTimer = setTimeout(() => {
-      const result = getOrderMenu.filter((data) =>
+      const result = orderMenu.filter((data) =>
         data.value.menu_name.toLowerCase().includes(value.toLowerCase())
       );
 

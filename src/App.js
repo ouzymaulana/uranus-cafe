@@ -1,122 +1,65 @@
 import React, { useEffect, useState } from "react";
 import "./css/style.css";
-import Aside from "./components/sidebarMenu/AsideComponent";
-import Header from "./components/header/HeaderComponent";
-import Nav from "./components/orderListComponent/OrderComponent.js";
-import Main from "./components/main/MainComponent";
+import Aside from "./layout/SidebarMenu/SidebarMenu";
+import Header from "./layout/Header/Header";
+import OrderComponent from "./layout/SidebarOrderlist/Index";
+import Main from "./layout/Main/Main";
 import "react-loading-skeleton/dist/skeleton.css";
+import IndexComponent from "./components/__test__/IndexComponent";
+import dataOrderMenu from "./helper";
+import LoginComponent from "./pages/Login/Login";
 
 function App() {
-  const [menu, setMenu] = useState([]);
-  const [searchName, setSearchName] = useState("");
-  const [orderMenu, setOrderMenu] = useState([]);
+  const [showDashboard, setShowDashboar] = useState(false);
 
-  const addOrderList = (value) => {
-    if (value.stock > 0) {
-      // const checkOrderMenu = orderMenu.find(
-      //   (menuOrder) => menuOrder.id == value.id
-      // );
-      const getOrderMenu = JSON.parse(localStorage.getItem("orderMenu"));
-      let checkOrderMenu;
-      if (getOrderMenu) {
-        checkOrderMenu = getOrderMenu.find(
-          (dataOrderMenu) => dataOrderMenu.value.id === value.id
-        );
-      }
-      if (!checkOrderMenu) {
-        // setOrderMenu([...orderMenu, value]);
-        // const currentOrderMenu = [...orderMenu, value];
-        const savedOrderMenu = JSON.parse(localStorage.getItem("orderMenu"));
-
-        let newOrderMenu;
-        if (savedOrderMenu && Array.isArray(savedOrderMenu)) {
-          if (
-            savedOrderMenu === null ||
-            !savedOrderMenu.some((menu) => menu.id === value.id)
-          ) {
-            newOrderMenu = [
-              ...savedOrderMenu,
-              {
-                value,
-                quantity: 1,
-              },
-            ];
-            // newOrderMenu = [...savedOrderMenu, value];
-            // console.log(newOrderMenu);
-            // console.log("data bukan pertama kali");
-          }
-        } else {
-          // newOrderMenu = [value];
-          newOrderMenu = [{ value, quantity: 1 }];
-          // console.log(newOrderMenu);
-          // console.log("data pertama kali");
-        }
-
-        localStorage.setItem("orderMenu", JSON.stringify(newOrderMenu));
-        // setOrderMenu(currentOrderMenu);
-
-        setMenu(
-          menu.map((dataMenu) =>
-            dataMenu.id == value.id
-              ? { ...dataMenu, stock: dataMenu.stock - 1 }
-              : dataMenu
-          )
-        );
-
-        // setOrderQuantity({
-        //   ...orderQuantity,
-        //   [value.id]: 1,
-        // });
-      } else {
-        console.log("masuk kesini bro");
-        setMenu(
-          menu.map((dataMenu) =>
-            dataMenu.id === value.id
-              ? { ...dataMenu, stock: dataMenu.stock - 1 }
-              : dataMenu
-          )
-        );
-
-        // setOrderQuantity({
-        //   ...orderQuantity,
-        //   [value.id]: orderQuantity[value.id] + 1,
-        // });
-
-        if (getOrderMenu && Array.isArray(getOrderMenu)) {
-          const setOrderMenuLocalStorage = getOrderMenu.map((orderMenu) => {
-            return orderMenu.value.id === value.id
-              ? { ...orderMenu, quantity: orderMenu.quantity + 1 }
-              : orderMenu;
-          });
-          localStorage.setItem(
-            "orderMenu",
-            JSON.stringify(setOrderMenuLocalStorage)
-          );
-        }
-      }
-    } else {
-      alert("maaf, pesanan tersebut sedang kosong");
-    }
+  const handleLogin = () => {
+    setShowDashboar(false);
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("password");
   };
 
+  const username = sessionStorage.getItem("username");
+  const password = sessionStorage.getItem("password");
   return (
-    <div className="container">
-      <Header search={setSearchName} />
-      <Aside />
-      <Nav
-        orderMenu={orderMenu}
-        menu={menu}
-        setMenu={setMenu}
-        setOrderMenu={setOrderMenu}
-      />
-      <Main
-        addOrderList={addOrderList}
-        menu={menu}
-        setMenu={setMenu}
-        searchName={searchName}
-      />
-    </div>
+    <>
+      {!showDashboard && <LoginComponent setShowDashboar={setShowDashboar} />}
+      {showDashboard && (
+        <IndexComponent
+          setShowDashboar={setShowDashboar}
+          handleLogin={handleLogin}
+        />
+      )}
+    </>
   );
+  // const [menu, setMenu] = useState([]);
+  // const [searchName, setSearchName] = useState("");
+  // const [orderMenu, setOrderMenu] = useState([]);
+
+  // useEffect(() => {
+  //   const data = dataOrderMenu || [];
+  //   setOrderMenu(data);
+  // }, []);
+
+  // return (
+  //   <div className="container">
+  //     <Header search={setSearchName} />
+  //     <Aside />
+  //     <OrderComponent
+  //       orderMenu={orderMenu}
+  //       menu={menu}
+  //       setMenu={setMenu}
+  //       setOrderMenu={setOrderMenu}
+  //     />
+  //     <Main
+  //       // addOrderList={addOrderList}
+  //       menu={menu}
+  //       setMenu={setMenu}
+  //       searchName={searchName}
+  //       orderMenu={orderMenu}
+  //       setOrderMenu={setOrderMenu}
+  //     />
+  //   </div>
+  // );
 }
 
 export default App;

@@ -1,7 +1,8 @@
 import React from "react";
 import foto from "../../assets/you.png";
+// import LoginComponent from "../login/LoginComponent";
 
-const HeaderComponent = ({ search }) => {
+const HeaderComponent = ({ search, handleLogin }) => {
   return (
     <header>
       <div>
@@ -24,7 +25,7 @@ const HeaderComponent = ({ search }) => {
         <img src={foto} alt="" />
       </div>
       <div>
-        <a href="">
+        <a onClick={handleLogin}>
           <p>LOGOUT</p>
           <i className="fa-solid fa-right-to-bracket fa-2xl"></i>
         </a>

@@ -1,10 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import OrderListComponent from "./OrderListComponent";
-import LoadingOrderMenu from "./loadingComponent/LoadingOrderMenu";
-import HeaderOrderListComponent from "./HeaderOrderListComponent";
-import SearchOrderListComponent from "./SearchOrderListComponent";
-import ButtonCartComponent from "./ButtonCartComponent";
-import OrderSummary from "./OrderSummary";
+import React, { useState } from "react";
+// import OrderListComponent from "./OrderListComponent";
+import OrderListComponent from "../../components/Order/OrderList";
+// import LoadingOrderMenu from "./loadingComponent/LoadingOrderMenu";
+import LoadingOrderMenu from "../../components/Loading/LoadingOrderMenu";
+// import HeaderOrderListComponent from "./HeaderOrderListComponent";
+import HeaderOrderListComponent from "../../components/Order/HeaderOrderList";
+// import SearchOrderListComponent from "./SearchOrderListComponent";
+import SearchOrderListComponent from "../../components/Order/SearchOrderList";
+// import ButtonCartComponent from "./ButtonCartComponent";
+import ButtonCartComponent from "../../components/Order/ButtonCart";
+// import OrderSummary from "./OrderSummary";
+import OrderSummary from "../../components/Order/OrderSummary";
 
 const NavComponent = ({ orderMenu, menu, setMenu, setOrderMenu }) => {
   const [skaletonLoading, setSkaletonLoding] = useState(false);
@@ -12,14 +18,12 @@ const NavComponent = ({ orderMenu, menu, setMenu, setOrderMenu }) => {
   const [noResult, setNoResult] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 
-  const getOrderMenu = JSON.parse(localStorage.getItem("orderMenu"));
-
   const subTotal = (value) => {
     const result = value.quantity * value.value.price;
     return result;
   };
 
-  const currentData = searchOrderMenu == "" ? getOrderMenu : searchOrderMenu;
+  const currentData = searchOrderMenu == "" ? orderMenu : searchOrderMenu;
 
   return (
     <nav>
@@ -33,8 +37,6 @@ const NavComponent = ({ orderMenu, menu, setMenu, setOrderMenu }) => {
         setSearchValue={setSearchValue}
       />
       <div className="cart-content">
-        {/* {loadingStatus && searchData && <LoadingOrderMenu />}
-        {!loadingStatus && ( */}
         {skaletonLoading && searchOrderMenu && <LoadingOrderMenu />}
         {!skaletonLoading && (
           <>
@@ -43,7 +45,6 @@ const NavComponent = ({ orderMenu, menu, setMenu, setOrderMenu }) => {
                 pencarian tidak ditemukan
               </span>
             ) : currentData && Array.isArray(currentData) ? (
-              // currentData.map((result, index) => (
               currentData.map((result, index) => (
                 <OrderListComponent
                   key={index}
@@ -65,7 +66,11 @@ const NavComponent = ({ orderMenu, menu, setMenu, setOrderMenu }) => {
           </>
         )}
       </div>
-      <OrderSummary subTotal={subTotal} orderMenu={currentData} />
+      <OrderSummary
+        subTotal={subTotal}
+        orderMenu={orderMenu}
+        setOrderMenu={setOrderMenu}
+      />
       <ButtonCartComponent />
     </nav>
   );

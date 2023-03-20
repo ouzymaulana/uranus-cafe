@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
-import CardComponent from "./CardComponent";
-import LoadingCardMenu from "./LoadingCardMenu";
-import foodData from "./../../../src/menu.json";
+// import CardComponent from "./CardComponent";
+import CardComponent from "../../components/Main/CardMenu";
+import LoadingCardMenu from "../../components/Loading/LoadingCardMenu";
+import foodData from "../../menu.json";
+import dataOrderMenu from "../../helper";
 
-const MainComponent = ({ menu, addOrderList, searchName, setMenu }) => {
-  const [listMenu, setListMenu] = useState([]);
+const MainComponent = ({
+  menu,
+  searchName,
+  setMenu,
+  orderMenu,
+  setOrderMenu,
+}) => {
   const [isLoadingMenu, setIsLoadingMenu] = useState();
   const [skaletonLoadingMenu, setSkaletonLodingMenu] = useState(false);
   const [selectCategory, setSelectCategory] = useState("");
@@ -12,13 +19,11 @@ const MainComponent = ({ menu, addOrderList, searchName, setMenu }) => {
 
   const dataCategory = ["", "appetizer", "main course", "dessert", "drink"];
 
-  const getOrderMenu = JSON.parse(localStorage.getItem("orderMenu"));
-
+  const getOrderMenu = dataOrderMenu();
   const filterProduct = () => {
     clearTimeout(isLoadingMenu);
     setSkaletonLodingMenu(true);
     const timer = setTimeout(() => {
-      // const filteredProducts = menu.filter((item) => {
       const filteredProducts = foodData.filter((item) => {
         return (
           item.menu_name.toLowerCase().includes(searchName.toLowerCase()) &&
@@ -76,7 +81,11 @@ const MainComponent = ({ menu, addOrderList, searchName, setMenu }) => {
         {!skaletonLoadingMenu &&
           menu.map((result, index) => (
             <CardComponent
-              addOrderList={addOrderList}
+              menu={menu}
+              setMenu={setMenu}
+              orderMenu={orderMenu}
+              setOrderMenu={setOrderMenu}
+              // addOrderList={addOrderList}
               data={result}
               key={index}
             />

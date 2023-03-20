@@ -1,0 +1,104 @@
+.login {
+  color: black;
+  height: 100vh;
+  display: flex;
+  padding: 100px;
+  position: relative;
+}
+
+.layoutWelcome {
+  /* width: 100vh;
+  background-color: antiquewhite; */
+
+  width: 128vh;
+  height: 126vh;
+  position: relative;
+  top: -168px;
+  left: -504px;
+  background-color: antiquewhite;
+  transform: rotate(326deg);
+  border-radius: 280px;
+  background-image: url("../assets/img/Bruschetta.jpg");
+  background-position: top left, center center, bottom right;
+  background-size: 50%, cover;
+  box-shadow: 20px 40px 100px #263159;
+}
+
+.login-form {
+  position: absolute;
+  top: 5rem;
+  right: 20rem;
+  left: auto;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form p {
+  padding: 50px;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #334070;
+}
+
+input {
+  height: 50px;
+  font-size: 1.3rem;
+  padding-right: 40px;
+  width: 90%;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #263159;
+  margin-bottom: 10px;
+}
+
+input:focus {
+  outline: none;
+  border-bottom: 3px solid #263159;
+}
+
+.input-group {
+  position: relative;
+  flex: 1;
+}
+.input-group i {
+  position: absolute;
+  right: 0;
+  top: 50px;
+  color: #334070;
+}
+
+label {
+  display: flex;
+  /* flex-direction: column; */
+  color: #263159;
+}
+
+/* form {
+  display: contents;
+  justify-content: center;
+} */
+
+.button-login {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 10rem;
+  border: none;
+  border-radius: 40px;
+  font-size: 1.6rem;
+  background-color: #334070;
+  color: white;
+}
+
+.button-login a {
+  text-decoration: none;
+  color: white;
+}
+
+.button-login:hover {
+  background-color: #263159;
+}

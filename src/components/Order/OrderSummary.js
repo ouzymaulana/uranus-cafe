@@ -1,28 +1,27 @@
 import React, { useState, useEffect } from "react";
 
-const OrderSummary = ({ subTotal, orderMenu }) => {
-  const [total, setTotal] = useState([]);
+const OrderSummary = ({ orderMenu }) => {
+  const [total, setTotal] = useState(0);
   const [tax, setTax] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
 
-  function dataTotal() {
-    const getOrderMenu = JSON.parse(localStorage.getItem("orderMenu"));
-    let newTotal = 0;
-    if (getOrderMenu != null) {
-      getOrderMenu.forEach((item) => {
-        // newTotal += subTotal(item);
-        newTotal += item.quantity * item.value.price;
+  function calculateTotal(orderMenu) {
+    if (orderMenu !== null) {
+      let total = 0;
+      orderMenu.forEach((item) => {
+        total += item.quantity * item.value.price;
       });
+      return total;
     }
-    setTotal(newTotal);
-    setTax(newTotal * 0.1);
-    const resultTotalPay = newTotal + tax;
-    setTotalPay(resultTotalPay);
   }
 
   useEffect(() => {
-    dataTotal();
-  }, [total]);
+    const newTotal = calculateTotal(orderMenu);
+    setTotal(newTotal);
+    setTax(newTotal == undefined ? 0 : newTotal * 0.1);
+    const resultTotalPay = newTotal == undefined ? 0 : newTotal + tax;
+    setTotalPay(resultTotalPay);
+  }, [orderMenu, total]);
 
   return (
     <div className="subtotal-tax-total">

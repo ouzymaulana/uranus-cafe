@@ -101,6 +101,7 @@ header div:last-child a {
   align-items: center;
   text-decoration: none;
   color: #ff5f9e;
+  cursor: pointer;
 }
 
 header div:last-child a > p {

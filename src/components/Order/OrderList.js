@@ -12,20 +12,13 @@ const OrderListComponent = ({
   setNoResult,
   searchValue,
 }) => {
-  // console.log(item.value);
   const decrementQuantity = (value, id) => {
-    // mengubah jumlah quantity
-    const menuStock = item.stock;
-    // if (menuStock >= 0) {
-    const getOrderMenu = JSON.parse(localStorage.getItem("orderMenu"));
-    const checkStockMenu = getOrderMenu.find(
-      (result) => result.value.id === id
-    );
+    const checkStockMenu = orderMenu.find((result) => result.value.id === id);
     const newValue = checkStockMenu.quantity - parseInt(value);
     if (checkStockMenu.quantity > 1) {
       //pengurangan quantity
-      if (getOrderMenu && Array.isArray(getOrderMenu)) {
-        const setOrderMenuLocalStorage = getOrderMenu.map((orderMenu) => {
+      if (orderMenu && Array.isArray(orderMenu)) {
+        const setOrderMenuLocalStorage = orderMenu.map((orderMenu) => {
           return orderMenu.value.id === id
             ? { ...orderMenu, quantity: orderMenu.quantity - 1 }
             : orderMenu;
@@ -34,6 +27,7 @@ const OrderListComponent = ({
           "orderMenu",
           JSON.stringify(setOrderMenuLocalStorage)
         );
+        setOrderMenu(setOrderMenuLocalStorage);
       }
 
       const newMenu = menu.map((item) => {
@@ -52,16 +46,14 @@ const OrderListComponent = ({
 
   const incrementQuantity = (value, id) => {
     const getOrderMenu = JSON.parse(localStorage.getItem("orderMenu"));
-    const checkStockMenu = getOrderMenu.find(
-      (result) => result.value.id === id
-    );
+    const checkStockMenu = orderMenu.find((result) => result.value.id === id);
     const currentValue = parseInt(value) + checkStockMenu.quantity;
     const menuStock = menu.find((item) => item.id === id).stock;
 
     if (menuStock > 0) {
       // if (newValue > 0) {
-      if (getOrderMenu && Array.isArray(getOrderMenu)) {
-        const setOrderMenuLocalStorage = getOrderMenu.map((orderMenu) => {
+      if (orderMenu && Array.isArray(orderMenu)) {
+        const setOrderMenuLocalStorage = orderMenu.map((orderMenu) => {
           return orderMenu.value.id === id
             ? { ...orderMenu, quantity: orderMenu.quantity + 1 }
             : orderMenu;
@@ -70,6 +62,7 @@ const OrderListComponent = ({
           "orderMenu",
           JSON.stringify(setOrderMenuLocalStorage)
         );
+        setOrderMenu(setOrderMenuLocalStorage);
       }
 
       //* untuk perubahan stock ketika input berubah
@@ -91,14 +84,17 @@ const OrderListComponent = ({
 
   const getOrderMenu = JSON.parse(localStorage.getItem("orderMenu"));
   const deleteOrderMenu = (value) => {
-    const currentOrderMenu = getOrderMenu.filter(
+    const currentOrderMenu = orderMenu.filter(
       (result) => result.value.id !== value
     );
-    localStorage.setItem("orderMenu", JSON.stringify(currentOrderMenu));
-    const newOrderMenu = orderMenu.filter((item) => item.id !== value);
-    setOrderMenu(newOrderMenu);
 
-    console.log(searchOrderMenu);
+    if (currentOrderMenu == "") {
+      localStorage.removeItem("orderMenu");
+    } else {
+      localStorage.setItem("orderMenu", JSON.stringify(currentOrderMenu));
+    }
+    setOrderMenu(currentOrderMenu);
+
     const filteredData = searchOrderMenu.filter(
       (item) => item.value.id !== value
     );
@@ -111,7 +107,7 @@ const OrderListComponent = ({
     }
 
     // * update stock menu ketika order list menu tersebut dihapus
-    const checkStockMenu = getOrderMenu.find(
+    const checkStockMenu = orderMenu.find(
       (result) => result.value.id === value
     );
     const newMenu = menu.map((item) => {
