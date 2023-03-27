@@ -2,7 +2,10 @@ import React from "react";
 import foto from "../../assets/you.png";
 // import LoginComponent from "../login/LoginComponent";
 
-const HeaderComponent = ({ search, handleLogin }) => {
+const HeaderComponent = ({ search, handleLogin, handleClickProfile }) => {
+  // const handleClickProfile = () => {
+  //   setShowProfile(true);
+  // };
   return (
     <header>
       <div>
@@ -20,7 +23,7 @@ const HeaderComponent = ({ search, handleLogin }) => {
           }
         />
       </div>
-      <div>
+      <div onClick={handleClickProfile}>
         <p>Ouzy Maulana</p>
         <img src={foto} alt="" />
       </div>

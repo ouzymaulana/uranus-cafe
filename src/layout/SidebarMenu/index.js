@@ -8,7 +8,7 @@ const AsideComponent = () => {
       </div>
       <div className="sidebar-menu">
         <a href="" title="database">
-          <i className="fa-sharp fa-solid fa-database"></i>
+          <i className="fa-solid fa-layer-group"></i>
         </a>
         <a href="">
           <i className="fa-solid fa-bag-shopping"></i>
@@ -17,10 +17,10 @@ const AsideComponent = () => {
           <i className="fa-solid fa-wallet"></i>
         </a>
         <a href="">
-          <i className="fa-solid fa-wallet"></i>
+          <i className="fa-regular fa-share-from-square"></i>
         </a>
         <a href="">
-          <i className="fa-solid fa-message"></i>
+          <i className="fa-regular fa-message"></i>
         </a>
         <a href="">
           <i className="fa-solid fa-gear"></i>

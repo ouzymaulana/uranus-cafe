@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import CardComponent from "./CardComponent";
-import CardComponent from "../../components/Main/CardMenu";
+import CardComponent from "../../components/Main/MainCardMenu";
 import LoadingCardMenu from "../../components/Loading/LoadingCardMenu";
 import foodData from "../../menu.json";
 import dataOrderMenu from "../../helper";
@@ -15,7 +14,6 @@ const MainComponent = ({
   const [isLoadingMenu, setIsLoadingMenu] = useState();
   const [skaletonLoadingMenu, setSkaletonLodingMenu] = useState(false);
   const [selectCategory, setSelectCategory] = useState("");
-  const [isCategory, setIsCategory] = useState("");
 
   const dataCategory = ["", "appetizer", "main course", "dessert", "drink"];
 
@@ -42,7 +40,6 @@ const MainComponent = ({
         }
       });
 
-      // setListMenu(filteredProducts);
       setMenu(checkStockMenu);
       setSkaletonLodingMenu(false);
     }, 500);
@@ -61,9 +58,8 @@ const MainComponent = ({
             return (
               <a
                 key={index}
-                className={setIsCategory === result ? "active" : ""}
+                className={selectCategory === result ? "active" : ""}
                 onClick={() => {
-                  // handleCat("");
                   setSelectCategory(result);
                 }}
               >
@@ -85,7 +81,6 @@ const MainComponent = ({
               setMenu={setMenu}
               orderMenu={orderMenu}
               setOrderMenu={setOrderMenu}
-              // addOrderList={addOrderList}
               data={result}
               key={index}
             />

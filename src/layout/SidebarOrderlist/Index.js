@@ -4,11 +4,11 @@ import OrderListComponent from "../../components/Order/OrderList";
 // import LoadingOrderMenu from "./loadingComponent/LoadingOrderMenu";
 import LoadingOrderMenu from "../../components/Loading/LoadingOrderMenu";
 // import HeaderOrderListComponent from "./HeaderOrderListComponent";
-import HeaderOrderListComponent from "../../components/Order/HeaderOrderList";
+import HeaderOrderListComponent from "../../components/Order/OrderHeader";
 // import SearchOrderListComponent from "./SearchOrderListComponent";
-import SearchOrderListComponent from "../../components/Order/SearchOrderList";
+import SearchOrderListComponent from "../../components/Order/OrderSearch";
 // import ButtonCartComponent from "./ButtonCartComponent";
-import ButtonCartComponent from "../../components/Order/ButtonCart";
+import ButtonCartComponent from "../../components/Order/OrderButton";
 // import OrderSummary from "./OrderSummary";
 import OrderSummary from "../../components/Order/OrderSummary";
 

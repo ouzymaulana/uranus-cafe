@@ -1,65 +1,67 @@
 import React, { useEffect, useState } from "react";
 import "./css/style.css";
-import Aside from "./layout/SidebarMenu/SidebarMenu";
-import Header from "./layout/Header/Header";
-import OrderComponent from "./layout/SidebarOrderlist/Index";
-import Main from "./layout/Main/Main";
 import "react-loading-skeleton/dist/skeleton.css";
 import IndexComponent from "./components/__test__/IndexComponent";
-import dataOrderMenu from "./helper";
-import LoginComponent from "./pages/Login/Login";
+import LoginPage from "./pages/Login/Login";
+import Cookies from "js-cookie";
+import ProfilePage from "./pages/Profile/index";
+import ProtectedRoute from "./Routes/ProtectedRoute";
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from "react-router-dom";
 
 function App() {
-  const [showDashboard, setShowDashboar] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(false);
 
   const handleLogin = () => {
-    setShowDashboar(false);
-    sessionStorage.removeItem("username");
-    sessionStorage.removeItem("password");
+    setShowDashboard(false);
+    Cookies.remove("password");
+    Cookies.remove("email");
   };
 
-  const username = sessionStorage.getItem("username");
-  const password = sessionStorage.getItem("password");
+  const ifHasEmail = Cookies.get("email");
+  const ifHasPassword = Cookies.get("password");
+
+  useEffect(() => {
+    if (ifHasEmail == undefined || ifHasPassword == undefined) {
+      setShowDashboard(false);
+    } else {
+      setShowDashboard(true);
+    }
+  }, []);
   return (
     <>
-      {!showDashboard && <LoginComponent setShowDashboar={setShowDashboar} />}
-      {showDashboard && (
-        <IndexComponent
-          setShowDashboar={setShowDashboar}
-          handleLogin={handleLogin}
-        />
-      )}
+      <Router>
+        <Switch>
+          <ProtectedRoute
+            exact
+            path="/list-menu"
+            component={IndexComponent}
+            isAuthenticated={showDashboard}
+            handleLogin={handleLogin}
+          />
+          <ProtectedRoute
+            path="/profile"
+            component={ProfilePage}
+            isAuthenticated={showDashboard}
+          />
+          {!showDashboard ? (
+            <Route
+              path="/"
+              render={(props) => (
+                <LoginPage setShowDashboard={setShowDashboard} {...props} />
+              )}
+            />
+          ) : (
+            <Redirect to="/list-menu" />
+          )}
+        </Switch>
+      </Router>
     </>
   );
-  // const [menu, setMenu] = useState([]);
-  // const [searchName, setSearchName] = useState("");
-  // const [orderMenu, setOrderMenu] = useState([]);
-
-  // useEffect(() => {
-  //   const data = dataOrderMenu || [];
-  //   setOrderMenu(data);
-  // }, []);
-
-  // return (
-  //   <div className="container">
-  //     <Header search={setSearchName} />
-  //     <Aside />
-  //     <OrderComponent
-  //       orderMenu={orderMenu}
-  //       menu={menu}
-  //       setMenu={setMenu}
-  //       setOrderMenu={setOrderMenu}
-  //     />
-  //     <Main
-  //       // addOrderList={addOrderList}
-  //       menu={menu}
-  //       setMenu={setMenu}
-  //       searchName={searchName}
-  //       orderMenu={orderMenu}
-  //       setOrderMenu={setOrderMenu}
-  //     />
-  //   </div>
-  // );
 }
 
 export default App;

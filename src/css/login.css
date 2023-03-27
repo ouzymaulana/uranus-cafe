@@ -1,20 +1,20 @@
 .login {
   color: black;
-  height: 100vh;
+  /* height: 100vh; */
   display: flex;
-  padding: 100px;
+  flex-wrap: wrap;
+  /* padding: 100px; */
   position: relative;
 }
 
 .layoutWelcome {
-  /* width: 100vh;
-  background-color: antiquewhite; */
-
-  width: 128vh;
+  /* width: 128vh; */
+  width: 111vh;
   height: 126vh;
   position: relative;
   top: -168px;
-  left: -504px;
+  /* left: -504px; */
+  left: -288px;
   background-color: antiquewhite;
   transform: rotate(326deg);
   border-radius: 280px;
@@ -25,18 +25,22 @@
 }
 
 .login-form {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-item {
   position: absolute;
   top: 5rem;
-  right: 20rem;
-  left: auto;
-  margin: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.login-form p {
+.login-item p {
   padding: 50px;
   font-size: 3rem;
   font-weight: 700;
@@ -44,15 +48,13 @@
 }
 
 input {
-  height: 50px;
-  font-size: 1.3rem;
-  padding-right: 40px;
-  width: 90%;
+  padding: 15px;
   border-top: none;
   border-left: none;
   border-right: none;
   border-bottom: 1px solid #263159;
-  margin-bottom: 10px;
+  width: 25rem;
+  font-size: 20px;
 }
 
 input:focus {
@@ -61,9 +63,11 @@ input:focus {
 }
 
 .input-group {
+  display: flex;
+  flex-direction: column;
   position: relative;
-  flex: 1;
 }
+
 .input-group i {
   position: absolute;
   right: 0;
@@ -71,16 +75,29 @@ input:focus {
   color: #334070;
 }
 
-label {
+.input-group .icon-item {
   display: flex;
-  /* flex-direction: column; */
-  color: #263159;
+  flex-direction: row;
 }
 
-/* form {
-  display: contents;
+.input-group .icon-item i:first-child {
+  right: 10%;
+  cursor: pointer;
+}
+
+.input-group span {
+  color: red;
+}
+label {
+  display: flex;
+  color: #2631598a;
+  font-weight: 500;
+}
+
+.login-item div:last-child {
   justify-content: center;
-} */
+  display: flex;
+}
 
 .button-login {
   margin-top: 2rem;
@@ -89,7 +106,7 @@ label {
   padding: 20px 10rem;
   border: none;
   border-radius: 40px;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   background-color: #334070;
   color: white;
 }
