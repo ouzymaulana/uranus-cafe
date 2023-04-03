@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import "./css/style.css";
 import "react-loading-skeleton/dist/skeleton.css";
-import IndexComponent from "./components/__test__/IndexComponent";
+import IndexComponent from "./pages/Menu/Index";
 import LoginPage from "./pages/Login/Login";
 import Cookies from "js-cookie";
 import ProfilePage from "./pages/Profile/index";
@@ -12,6 +12,8 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
+import OrderMenuContextProvider from "./config/Context/OrderMenuContextProvider";
+import DataMenuContextProvider from "./config/Context/DataMenuContextProvider";
 
 function App() {
   const [showDashboard, setShowDashboard] = useState(false);
@@ -35,30 +37,34 @@ function App() {
   return (
     <>
       <Router>
-        <Switch>
-          <ProtectedRoute
-            exact
-            path="/list-menu"
-            component={IndexComponent}
-            isAuthenticated={showDashboard}
-            handleLogin={handleLogin}
-          />
-          <ProtectedRoute
-            path="/profile"
-            component={ProfilePage}
-            isAuthenticated={showDashboard}
-          />
-          {!showDashboard ? (
-            <Route
-              path="/"
-              render={(props) => (
-                <LoginPage setShowDashboard={setShowDashboard} {...props} />
+        <DataMenuContextProvider>
+          <OrderMenuContextProvider>
+            <Switch>
+              <ProtectedRoute
+                exact
+                path="/list-menu"
+                component={IndexComponent}
+                isAuthenticated={showDashboard}
+                handleLogin={handleLogin}
+              />
+              {/* <ProtectedRoute
+                path="/profile"
+                component={ProfilePage}
+                isAuthenticated={showDashboard}
+              /> */}
+              {!showDashboard ? (
+                <Route
+                  path="/"
+                  render={(props) => (
+                    <LoginPage setShowDashboard={setShowDashboard} {...props} />
+                  )}
+                />
+              ) : (
+                <Redirect to="/list-menu" />
               )}
-            />
-          ) : (
-            <Redirect to="/list-menu" />
-          )}
-        </Switch>
+            </Switch>
+          </OrderMenuContextProvider>
+        </DataMenuContextProvider>
       </Router>
     </>
   );

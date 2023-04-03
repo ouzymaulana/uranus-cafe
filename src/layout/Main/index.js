@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import CardComponent from "../../components/Main/MainCardMenu";
+import CartMenu from "../../components/Main/MainCardMenu";
 import LoadingCardMenu from "../../components/Loading/LoadingCardMenu";
 import foodData from "../../menu.json";
-import dataOrderMenu from "../../helper";
+import dataOrderMenu from "../../Helper/orderMenuLocalStorage";
+import DataSoldMenu from "../../Helper/SoldDataMenuLocalStorage";
+import { useOrderMenu } from "../../config/Context/OrderMenuContextProvider";
+import { useDataMenu } from "../../config/Context/DataMenuContextProvider";
 
-const MainComponent = ({
-  menu,
-  searchName,
-  setMenu,
-  orderMenu,
-  setOrderMenu,
-}) => {
+const MainComponent = ({ searchName }) => {
+  const { menu, setMenu } = useDataMenu();
+  const { orderMenu, setOrderMenu } = useOrderMenu();
+
   const [isLoadingMenu, setIsLoadingMenu] = useState();
   const [skaletonLoadingMenu, setSkaletonLodingMenu] = useState(false);
   const [selectCategory, setSelectCategory] = useState("");
@@ -18,6 +18,7 @@ const MainComponent = ({
   const dataCategory = ["", "appetizer", "main course", "dessert", "drink"];
 
   const getOrderMenu = dataOrderMenu();
+  const getSoldMenu = DataSoldMenu();
   const filterProduct = () => {
     clearTimeout(isLoadingMenu);
     setSkaletonLodingMenu(true);
@@ -33,11 +34,37 @@ const MainComponent = ({
         const orderMenu = getOrderMenu
           ? getOrderMenu.find((order) => order.value.id === dataMenu.id)
           : null;
-        if (orderMenu) {
+
+        const soldMenu = getSoldMenu
+          ? getSoldMenu.find(
+              (itemSoldData) => itemSoldData.value.id === dataMenu.id
+            )
+          : null;
+
+        console.log("soldmenu ", soldMenu);
+        console.log("ordermenu ", orderMenu);
+        if (orderMenu !== undefined && soldMenu !== undefined) {
+          console.log("dua dua ada");
+          const subtraction = dataMenu.stock - orderMenu.quantity;
+          return {
+            ...dataMenu,
+            stock: subtraction - soldMenu.quantity,
+          };
+        } else if (orderMenu !== undefined && soldMenu == undefined) {
+          console.log("data order menu doang yang ada");
           return { ...dataMenu, stock: dataMenu.stock - orderMenu.quantity };
+        } else if (orderMenu == undefined && soldMenu !== undefined) {
+          console.log("data sold menu doang yang ada");
+          return { ...dataMenu, stock: dataMenu.stock - soldMenu.quantity };
         } else {
+          console.log("belum ada dua duanya");
           return dataMenu;
         }
+        // if (orderMenu) {
+        //   return { ...dataMenu, stock: dataMenu.stock - orderMenu.quantity };
+        // } else {
+        //   return dataMenu;
+        // }
       });
 
       setMenu(checkStockMenu);
@@ -76,7 +103,7 @@ const MainComponent = ({
         {skaletonLoadingMenu && <LoadingCardMenu />}
         {!skaletonLoadingMenu &&
           menu.map((result, index) => (
-            <CardComponent
+            <CartMenu
               menu={menu}
               setMenu={setMenu}
               orderMenu={orderMenu}

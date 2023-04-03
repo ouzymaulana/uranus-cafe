@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useDataSearchOrderMenu } from "../../config/Context/DataSearchOrderMenuContextProvider";
+import { useOrderMenu } from "../../config/Context/OrderMenuContextProvider";
 
-const SearchOrderListComponent = ({
-  setSearchOrderMenu,
+const OrderSearch = ({
   setSkaletonLoding,
-  orderMenu,
   setNoResult,
   searchValue,
   setSearchValue,
 }) => {
+  const { setSearchOrderMenu } = useDataSearchOrderMenu();
+
   const [isLoading, setIsLoading] = useState();
+  const { orderMenu } = useOrderMenu();
 
   const handleSearchOrderMenu = (value) => {
     clearTimeout(isLoading);
@@ -71,4 +74,4 @@ const SearchOrderListComponent = ({
   );
 };
 
-export default SearchOrderListComponent;
+export default OrderSearch;

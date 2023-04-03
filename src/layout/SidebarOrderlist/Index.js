@@ -1,20 +1,19 @@
 import React, { useState } from "react";
-// import OrderListComponent from "./OrderListComponent";
 import OrderListComponent from "../../components/Order/OrderList";
-// import LoadingOrderMenu from "./loadingComponent/LoadingOrderMenu";
 import LoadingOrderMenu from "../../components/Loading/LoadingOrderMenu";
-// import HeaderOrderListComponent from "./HeaderOrderListComponent";
 import HeaderOrderListComponent from "../../components/Order/OrderHeader";
-// import SearchOrderListComponent from "./SearchOrderListComponent";
-import SearchOrderListComponent from "../../components/Order/OrderSearch";
-// import ButtonCartComponent from "./ButtonCartComponent";
+import OrderSearch from "../../components/Order/OrderSearch";
 import ButtonCartComponent from "../../components/Order/OrderButton";
-// import OrderSummary from "./OrderSummary";
 import OrderSummary from "../../components/Order/OrderSummary";
+import { useOrderMenu } from "../../config/Context/OrderMenuContextProvider";
+import { useDataSearchOrderMenu } from "../../config/Context/DataSearchOrderMenuContextProvider";
+import TotalPayContextProvider from "../../config/Context/TotalPayContextProvider";
 
-const NavComponent = ({ orderMenu, menu, setMenu, setOrderMenu }) => {
+const NavComponent = () => {
+  const { orderMenu } = useOrderMenu();
+  const { searchOrderMenu } = useDataSearchOrderMenu();
+
   const [skaletonLoading, setSkaletonLoding] = useState(false);
-  const [searchOrderMenu, setSearchOrderMenu] = useState([]);
   const [noResult, setNoResult] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 
@@ -28,10 +27,8 @@ const NavComponent = ({ orderMenu, menu, setMenu, setOrderMenu }) => {
   return (
     <nav>
       <HeaderOrderListComponent />
-      <SearchOrderListComponent
+      <OrderSearch
         setSkaletonLoding={setSkaletonLoding}
-        setSearchOrderMenu={setSearchOrderMenu}
-        orderMenu={orderMenu}
         setNoResult={setNoResult}
         searchValue={searchValue}
         setSearchValue={setSearchValue}
@@ -50,12 +47,6 @@ const NavComponent = ({ orderMenu, menu, setMenu, setOrderMenu }) => {
                   key={index}
                   item={result}
                   subTotal={subTotal}
-                  menu={menu}
-                  setMenu={setMenu}
-                  orderMenu={orderMenu}
-                  setOrderMenu={setOrderMenu}
-                  searchOrderMenu={searchOrderMenu}
-                  setSearchOrderMenu={setSearchOrderMenu}
                   setNoResult={setNoResult}
                   searchValue={searchValue}
                 />
@@ -66,12 +57,10 @@ const NavComponent = ({ orderMenu, menu, setMenu, setOrderMenu }) => {
           </>
         )}
       </div>
-      <OrderSummary
-        subTotal={subTotal}
-        orderMenu={orderMenu}
-        setOrderMenu={setOrderMenu}
-      />
-      <ButtonCartComponent />
+      <TotalPayContextProvider>
+        <OrderSummary />
+        <ButtonCartComponent />
+      </TotalPayContextProvider>
     </nav>
   );
 };

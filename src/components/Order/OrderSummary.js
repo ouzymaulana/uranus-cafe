@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useOrderMenu } from "../../config/Context/OrderMenuContextProvider";
+import { useTotalPayValue } from "../../config/Context/TotalPayContextProvider";
 
-const OrderSummary = ({ orderMenu }) => {
+const OrderSummary = () => {
+  const { totalPay, setTotalPay } = useTotalPayValue();
   const [total, setTotal] = useState(0);
   const [tax, setTax] = useState(0);
-  const [totalPay, setTotalPay] = useState(0);
+  const { orderMenu } = useOrderMenu();
 
   function calculateTotal(orderMenu) {
     if (orderMenu !== null) {
