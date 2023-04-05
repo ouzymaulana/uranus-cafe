@@ -15,7 +15,7 @@ const ProtectedRoute = ({
           // showDashboard ? (
           <Component handleLogin={handleLogin} {...props} />
         ) : (
-          <Redirect to={{ pathname: "/", state: { from: props.location } }} />
+          <Redirect to="/" />
         )
       }
     />

@@ -1,11 +1,13 @@
 import React from "react";
 import foto from "../../assets/you.png";
 // import LoginComponent from "../login/LoginComponent";
+import { useSearchMenu } from "../../config/Context/SearchMenuContextProvider";
 
 const HeaderComponent = ({ search, handleLogin, handleClickProfile }) => {
   // const handleClickProfile = () => {
   //   setShowProfile(true);
   // };
+  const { setSearchName } = useSearchMenu();
   return (
     <header>
       <div>
@@ -19,7 +21,8 @@ const HeaderComponent = ({ search, handleLogin, handleClickProfile }) => {
           placeholder="Search anything, find everything"
           autoComplete="off"
           onKeyDown={(event) =>
-            event.key === "Enter" ? search(event.target.value) : ""
+            // event.key === "Enter" ? search(event.target.value) : ""
+            event.key === "Enter" ? setSearchName(event.target.value) : ""
           }
         />
       </div>

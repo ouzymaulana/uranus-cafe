@@ -6,10 +6,14 @@ import dataOrderMenu from "../../Helper/orderMenuLocalStorage";
 import DataSoldMenu from "../../Helper/SoldDataMenuLocalStorage";
 import { useOrderMenu } from "../../config/Context/OrderMenuContextProvider";
 import { useDataMenu } from "../../config/Context/DataMenuContextProvider";
+import OrderComponent from "../../layout/SidebarOrderlist/Index";
+import { useSearchMenu } from "../../config/Context/SearchMenuContextProvider";
 
-const MainComponent = ({ searchName }) => {
+// const MainComponent = ({ searchName }) => {
+const MainComponent = () => {
   const { menu, setMenu } = useDataMenu();
   const { orderMenu, setOrderMenu } = useOrderMenu();
+  const { searchName } = useSearchMenu();
 
   const [isLoadingMenu, setIsLoadingMenu] = useState();
   const [skaletonLoadingMenu, setSkaletonLodingMenu] = useState(false);
@@ -41,30 +45,21 @@ const MainComponent = ({ searchName }) => {
             )
           : null;
 
-        console.log("soldmenu ", soldMenu);
-        console.log("ordermenu ", orderMenu);
+        const orderMenuQuantity = orderMenu ? orderMenu.quantity : 0;
+        const soldMenuQuantity = soldMenu ? soldMenu.quantity : 0;
         if (orderMenu !== undefined && soldMenu !== undefined) {
-          console.log("dua dua ada");
-          const subtraction = dataMenu.stock - orderMenu.quantity;
+          const subtraction = dataMenu.stock - orderMenuQuantity;
           return {
             ...dataMenu,
-            stock: subtraction - soldMenu.quantity,
+            stock: subtraction - soldMenuQuantity,
           };
         } else if (orderMenu !== undefined && soldMenu == undefined) {
-          console.log("data order menu doang yang ada");
-          return { ...dataMenu, stock: dataMenu.stock - orderMenu.quantity };
+          return { ...dataMenu, stock: dataMenu.stock - orderMenuQuantity };
         } else if (orderMenu == undefined && soldMenu !== undefined) {
-          console.log("data sold menu doang yang ada");
-          return { ...dataMenu, stock: dataMenu.stock - soldMenu.quantity };
+          return { ...dataMenu, stock: dataMenu.stock - soldMenuQuantity };
         } else {
-          console.log("belum ada dua duanya");
           return dataMenu;
         }
-        // if (orderMenu) {
-        //   return { ...dataMenu, stock: dataMenu.stock - orderMenu.quantity };
-        // } else {
-        //   return dataMenu;
-        // }
       });
 
       setMenu(checkStockMenu);
@@ -78,42 +73,45 @@ const MainComponent = ({ searchName }) => {
   }, [searchName, selectCategory]);
 
   return (
-    <main>
-      <div>
-        <div className="menu-main">
-          {dataCategory.map((result, index) => {
-            return (
-              <a
+    <div className="menu-page">
+      <main>
+        <div>
+          <div className="menu-main">
+            {dataCategory.map((result, index) => {
+              return (
+                <a
+                  key={index}
+                  className={selectCategory === result ? "active" : ""}
+                  onClick={() => {
+                    setSelectCategory(result);
+                  }}
+                >
+                  {result == "" ? "All" : result}
+                </a>
+              );
+            })}
+          </div>
+          <div className="icon-menu-main">
+            <i className="fa-solid fa-bars fa-xl"></i>
+          </div>
+        </div>
+        <div className="main-content">
+          {skaletonLoadingMenu && <LoadingCardMenu />}
+          {!skaletonLoadingMenu &&
+            menu.map((result, index) => (
+              <CartMenu
+                menu={menu}
+                setMenu={setMenu}
+                orderMenu={orderMenu}
+                setOrderMenu={setOrderMenu}
+                data={result}
                 key={index}
-                className={selectCategory === result ? "active" : ""}
-                onClick={() => {
-                  setSelectCategory(result);
-                }}
-              >
-                {result == "" ? "All" : result}
-              </a>
-            );
-          })}
+              />
+            ))}
         </div>
-        <div className="icon-menu-main">
-          <i className="fa-solid fa-bars fa-xl"></i>
-        </div>
-      </div>
-      <div className="main-content">
-        {skaletonLoadingMenu && <LoadingCardMenu />}
-        {!skaletonLoadingMenu &&
-          menu.map((result, index) => (
-            <CartMenu
-              menu={menu}
-              setMenu={setMenu}
-              orderMenu={orderMenu}
-              setOrderMenu={setOrderMenu}
-              data={result}
-              key={index}
-            />
-          ))}
-      </div>
-    </main>
+      </main>
+      <OrderComponent />
+    </div>
   );
 };
 

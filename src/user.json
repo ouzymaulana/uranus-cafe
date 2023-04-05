@@ -3,6 +3,14 @@
     "id": 1,
     "username": "ouzy",
     "email": "ouzy@gmail.com",
-    "password": "ouzypwd"
+    "password": "ouzypwd",
+    "role": "admin"
+  },
+  {
+    "id": 2,
+    "username": "maulana",
+    "email": "maulana@gmail.com",
+    "password": "ouzypwd",
+    "role": "user"
   }
 ]

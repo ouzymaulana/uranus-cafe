@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const AsideComponent = () => {
   return (
@@ -7,12 +8,12 @@ const AsideComponent = () => {
         <p>logo</p>
       </div>
       <div className="sidebar-menu">
-        <a href="" title="database">
+        <Link to="/dashboard">
           <i className="fa-solid fa-layer-group"></i>
-        </a>
-        <a href="">
+        </Link>
+        <Link to="/list-menu">
           <i className="fa-solid fa-bag-shopping"></i>
-        </a>
+        </Link>
         <a href="">
           <i className="fa-solid fa-wallet"></i>
         </a>

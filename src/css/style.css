@@ -7,15 +7,17 @@ body {
   display: grid;
   grid-template-areas:
     "aside header header"
-    "aside main nav"
-    "aside main nav";
+    "aside main main"
+    "aside main main";
 
-  grid-template-columns: 0.2fr 2fr 0.8fr;
+  grid-template-columns: 0.2fr 3.5fr 0;
+  /* grid-template-columns: 0.2fr 2fr 0.8fr; */
   grid-template-rows: 0.1fr;
   /* position: fixed; */
 }
 
 header {
+  z-index: 1;
   grid-area: header;
   background-color: white;
   display: flex;
@@ -29,15 +31,17 @@ aside {
   grid-area: aside;
   background-color: #263159;
   padding: 30px 0;
+  width: 120px;
 }
 
 nav {
-  grid-area: nav;
+  /* grid-area: nav; */
   background-color: #263159;
   padding: 30px 0;
 }
 
 main {
+  flex: 2.3;
   grid-area: main;
   background-color: aliceblue;
   /* background-color: #f7f7f7; */
@@ -114,6 +118,10 @@ header div:last-child a > p {
 header div:last-child a,
 header div:last-child p {
   margin: 0 5px;
+}
+
+.menu-page {
+  display: flex;
 }
 
 /* Sidebar */
@@ -254,6 +262,7 @@ main div:last-child .card em {
 
 nav {
   padding: 0;
+  flex: 1;
 }
 
 nav .order-list-title {
@@ -441,4 +450,48 @@ nav .cart-button a:last-child span {
 }
 .fa-arrow-right {
   padding: 0 30px;
+}
+
+/* Dashboard page */
+
+.dashboard-page {
+  padding: 30px 30px;
+  grid-area: main;
+  background-color: aliceblue;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  height: 100vh;
+}
+
+.product-percategory {
+  background-color: white;
+  padding: 20px 20px;
+  height: min-content;
+}
+
+.product-sold {
+  background-color: white;
+  padding: 20px 20px;
+  width: 18.8rem;
+  height: min-content;
+}
+
+.transaction-total {
+  font-size: large;
+  color: black;
+  background-color: white;
+  height: 100px;
+  width: 300px;
+  padding: 20px 20px;
+  position: relative;
+}
+
+.transaction-total div:last-child {
+  font-size: x-large;
+  font-weight: 600;
+  color: rgb(136, 136, 136);
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
 }

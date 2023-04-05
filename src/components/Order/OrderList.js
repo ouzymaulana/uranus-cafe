@@ -30,7 +30,7 @@ const OrderListComponent = ({ item, subTotal, setNoResult, searchValue }) => {
           </a>
         </div>
 
-        <p>{subTotal(item)}</p>
+        <p>{subTotal(item).toLocaleString("id-ID")}</p>
         <span
           onClick={() =>
             deleteOrderMenu(
